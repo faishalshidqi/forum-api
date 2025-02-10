@@ -31,13 +31,6 @@ func (ur *userRepository) Add(ctx context.Context, user domains.SignupRequest) (
 }
 
 func (ur *userRepository) Fetch(ctx context.Context) ([]domains.User, error) {
-	/*
-		users, err := ur.database.Query.GetUsers(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return users, nil
-	*/
 	//TODO implement me
 	panic("implement me")
 }
