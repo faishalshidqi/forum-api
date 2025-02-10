@@ -2,7 +2,8 @@ package bootstrap
 
 import (
 	"github.com/spf13/viper"
-	"log"
+	"log/slog"
+	"time"
 )
 
 type Env struct {
@@ -15,6 +16,12 @@ type Env struct {
 	AccessTokenKey  string `mapstructure:"ACCESS_TOKEN_KEY"`
 	RefreshTokenKey string `mapstructure:"REFRESH_TOKEN_KEY"`
 	AccessTokenAge  int    `mapstructure:"ACCESS_TOKEN_AGE"`
+
+	MaxConnections    int
+	MinConnections    int
+	MaxConnLifeTime   time.Duration
+	MaxConnIdleTime   time.Duration
+	HealthCheckPeriod time.Duration
 }
 
 func NewEnv() *Env {
@@ -22,11 +29,13 @@ func NewEnv() *Env {
 	viper.SetConfigFile(".env")
 	err := viper.ReadInConfig()
 	if err != nil {
-		log.Fatalf("Error reading config file, %s", err)
+		slog.Error("Error reading config file", slog.String("error", err.Error()))
+		return nil
 	}
 	err = viper.Unmarshal(&env)
 	if err != nil {
-		log.Fatalf("unable to decode into struct, %v", err)
+		slog.Error("unable to decode into struct", slog.String("error", err.Error()))
+		return nil
 	}
 	return &env
 }
