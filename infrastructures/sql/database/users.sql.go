@@ -8,27 +8,27 @@ package database
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createUser = `-- name: CreateUser :one
-insert into users (id, username, password, name, created_at, updated_at) values(gen_random_uuid(), $1, $2, $3, now(), now()) returning id, username, name
+insert into users (id, username, password, name, created_at, updated_at) values(gen_random_uuid(), lower($1), $2, lower($3), now(), now()) returning id, username, name
 `
 
 type CreateUserParams struct {
-	Username string
-	Password string
-	Name     string
+	Username string `db:"username" json:"username"`
+	Password string `db:"password" json:"password"`
+	Name     string `db:"name" json:"name"`
 }
 
 type CreateUserRow struct {
-	ID       uuid.UUID
-	Username string
-	Name     string
+	ID       pgtype.UUID `db:"id" json:"id"`
+	Username string      `db:"username" json:"username"`
+	Name     string      `db:"name" json:"name"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error) {
-	row := q.db.QueryRowContext(ctx, createUser, arg.Username, arg.Password, arg.Name)
+	row := q.db.QueryRow(ctx, createUser, arg.Username, arg.Password, arg.Name)
 	var i CreateUserRow
 	err := row.Scan(&i.ID, &i.Username, &i.Name)
 	return i, err
