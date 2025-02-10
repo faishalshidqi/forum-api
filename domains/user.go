@@ -15,7 +15,7 @@ type User struct {
 }
 
 type UserRepository interface {
-	Add(ctx context.Context, user User) error
+	Add(ctx context.Context, user SignupRequest) (SignupResponseData, error)
 	Fetch(ctx context.Context) ([]User, error)
 	GetByUsername(ctx context.Context, username string) (User, error)
 	GetByID(ctx context.Context, id string) (User, error)
