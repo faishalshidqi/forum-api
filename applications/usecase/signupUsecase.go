@@ -11,7 +11,7 @@ type signupUsecase struct {
 	contextTimeout time.Duration
 }
 
-func (su *signupUsecase) Create(c context.Context, user *domains.User) error {
+func (su *signupUsecase) Create(c context.Context, user *domains.SignupRequest) (domains.SignupResponseData, error) {
 	ctx, cancel := context.WithTimeout(c, su.contextTimeout)
 	defer cancel()
 	return su.userRepository.Add(ctx, *user)
