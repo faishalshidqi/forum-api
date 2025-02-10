@@ -21,6 +21,6 @@ type SignupResponseData struct {
 }
 
 type SignupUsecase interface {
-	Create(c context.Context, user *User) error
+	Create(c context.Context, user *SignupRequest) (SignupResponseData, error)
 	GetUserByUsername(c context.Context, username string) (User, error)
 }
