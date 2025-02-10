@@ -28,7 +28,6 @@ func NewPSQLDatabase(env *Env) *Database {
 	env.HealthCheckPeriod = 2 * time.Minute
 
 	dbUrl := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", psqlUser, psqlPassword, psqlHost, psqlPort, psqlDatabase)
-	//db, err := sql.Open("postgres", dbUrl)
 	db, err := pgxpool.New(context.Background(), dbUrl)
 	if err != nil {
 		log.Fatal(err)
