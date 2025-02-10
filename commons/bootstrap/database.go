@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"forum-api/infrastructures/sql/database"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"log"
+	"log/slog"
 	"time"
 )
 
@@ -30,11 +30,13 @@ func NewPSQLDatabase(env *Env) *Database {
 	dbUrl := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", psqlUser, psqlPassword, psqlHost, psqlPort, psqlDatabase)
 	db, err := pgxpool.New(context.Background(), dbUrl)
 	if err != nil {
-		log.Fatal(err)
+		slog.Error("Failed to connect to database", slog.String("reason", err.Error()))
+		return nil
 	}
 	err = db.Ping(context.Background())
 	if err != nil {
-		log.Fatal(err)
+		slog.Error("Failed to ping database", slog.String("reason", err.Error()))
+		return nil
 	}
 
 	return &Database{
