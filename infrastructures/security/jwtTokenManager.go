@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"forum-api/applications/security"
-	"forum-api/domains"
+	"forum-api/commons/sql/database"
 	"github.com/golang-jwt/jwt/v5"
 	"net/http"
 	"strings"
@@ -23,7 +23,7 @@ func (jtm *jwtTokenManager) GetBearerToken(header http.Header) (string, error) {
 	return strings.Split(headers, " ")[1], nil
 }
 
-func (jtm *jwtTokenManager) CreateToken(user domains.User, secret string, expiresIn time.Duration) (string, error) {
+func (jtm *jwtTokenManager) CreateToken(user database.User, secret string, expiresIn time.Duration) (string, error) {
 	userID := user.ID
 	token := jwt.NewWithClaims(
 		jwt.SigningMethodHS256,
@@ -31,7 +31,7 @@ func (jtm *jwtTokenManager) CreateToken(user domains.User, secret string, expire
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expiresIn)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			Issuer:    "ForumAPI",
-			Subject:   userID,
+			Subject:   userID.String(),
 		},
 	)
 	tokenString, err := token.SignedString([]byte(secret))
