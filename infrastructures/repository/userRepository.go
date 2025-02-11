@@ -18,7 +18,7 @@ func (ur *userRepository) Add(ctx context.Context, user domains.SignupRequest) (
 		database.CreateUserParams{
 			Username: user.Username,
 			Password: user.Password,
-			Name:     user.Fullname,
+			Fullname: user.Fullname,
 		},
 	)
 	if err != nil {
