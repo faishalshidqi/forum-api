@@ -7,6 +7,17 @@ import (
 	"time"
 )
 
+//	@title			Forum API
+//	@version		1.0
+//	@description	This is a Forum API
+
+// @host		localhost:9000
+// @BasePath	/
+// @securityDefinitions.apikey
+// @in							header
+// @name						Authorization
+// @externalDocs.description	OpenAPI
+// @externalDocs.url			https://swagger.io/resources/open-api/
 func main() {
 	app := bootstrap.App()
 	env := app.Env
