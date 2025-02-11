@@ -3,8 +3,9 @@ package repository
 import (
 	"context"
 	"forum-api/commons/bootstrap"
+	"forum-api/commons/sql/database"
 	"forum-api/domains"
-	"forum-api/infrastructures/sql/database"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type userRepository struct {
@@ -30,29 +31,28 @@ func (ur *userRepository) Add(ctx context.Context, user domains.SignupRequest) (
 	return returnedData, nil
 }
 
-func (ur *userRepository) Fetch(ctx context.Context) ([]domains.User, error) {
-	//TODO implement me
-	panic("implement me")
+func (ur *userRepository) Fetch(ctx context.Context) ([]database.User, error) {
+	users, err := ur.database.Query.GetUsers(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return users, err
 }
 
-func (ur *userRepository) GetByUsername(ctx context.Context, username string) (domains.User, error) {
+func (ur *userRepository) GetByUsername(ctx context.Context, username string) (database.User, error) {
 	user, err := ur.database.Query.GetByUsername(ctx, username)
 	if err != nil {
-		return domains.User{}, err
+		return database.User{}, err
 	}
-	return domains.User{
-		ID:        user.ID.String(),
-		Username:  user.Username,
-		Password:  user.Password,
-		FullName:  user.Name,
-		CreatedAt: user.CreatedAt.Time,
-		UpdatedAt: user.UpdatedAt.Time,
-	}, nil
+	return user, nil
 }
 
-func (ur *userRepository) GetByID(ctx context.Context, id string) (domains.User, error) {
-	//TODO implement me
-	panic("implement me")
+func (ur *userRepository) GetByID(ctx context.Context, id pgtype.UUID) (database.User, error) {
+	user, err := ur.database.Query.GetByID(ctx, id)
+	if err != nil {
+		return database.User{}, err
+	}
+	return user, nil
 }
 
 func NewUserRepository(database bootstrap.Database) domains.UserRepository {
