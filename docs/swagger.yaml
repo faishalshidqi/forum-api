@@ -1,11 +1,84 @@
 basePath: /
+definitions:
+  domains.ErrorResponse:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  domains.SignupResponse:
+    properties:
+      data:
+        $ref: '#/definitions/domains.SignupResponseData'
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  domains.SignupResponseData:
+    properties:
+      fullname:
+        type: string
+      id:
+        type: string
+      username:
+        type: string
+    type: object
 host: localhost:9000
 info:
   contact: {}
   description: This is a Forum API
   title: Forum API
   version: "1.0"
-paths: {}
+paths:
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: New user must have a unique email address
+      parameters:
+      - description: email address of the new user, must be unique
+        format: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: password of the new user
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      - description: name of the new user
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domains.SignupResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+      summary: Register A User
+      tags:
+      - users
 securityDefinitions:
   "":
     in: header
