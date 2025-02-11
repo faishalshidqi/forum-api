@@ -12,30 +12,30 @@ import (
 )
 
 const createUser = `-- name: CreateUser :one
-insert into users (id, username, password, name, created_at, updated_at) values(gen_random_uuid(), lower($1), $2, lower($3), now(), now()) returning id, username, name
+insert into users (id, username, password, fullname, created_at, updated_at) values(gen_random_uuid(), lower($1), $2, lower($3), now(), now()) returning id, username, fullname
 `
 
 type CreateUserParams struct {
 	Username string `db:"username" json:"username"`
 	Password string `db:"password" json:"password"`
-	Name     string `db:"name" json:"name"`
+	Fullname string `db:"fullname" json:"fullname"`
 }
 
 type CreateUserRow struct {
 	ID       pgtype.UUID `db:"id" json:"id"`
 	Username string      `db:"username" json:"username"`
-	Name     string      `db:"name" json:"name"`
+	Fullname string      `db:"fullname" json:"fullname"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error) {
-	row := q.db.QueryRow(ctx, createUser, arg.Username, arg.Password, arg.Name)
+	row := q.db.QueryRow(ctx, createUser, arg.Username, arg.Password, arg.Fullname)
 	var i CreateUserRow
-	err := row.Scan(&i.ID, &i.Username, &i.Name)
+	err := row.Scan(&i.ID, &i.Username, &i.Fullname)
 	return i, err
 }
 
 const getByID = `-- name: GetByID :one
-select id, username, password, name, created_at, updated_at from users where id = $1
+select id, username, password, fullname, created_at, updated_at from users where id = $1
 `
 
 func (q *Queries) GetByID(ctx context.Context, id pgtype.UUID) (User, error) {
@@ -45,7 +45,7 @@ func (q *Queries) GetByID(ctx context.Context, id pgtype.UUID) (User, error) {
 		&i.ID,
 		&i.Username,
 		&i.Password,
-		&i.Name,
+		&i.Fullname,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -53,7 +53,7 @@ func (q *Queries) GetByID(ctx context.Context, id pgtype.UUID) (User, error) {
 }
 
 const getByUsername = `-- name: GetByUsername :one
-select id, username, password, name, created_at, updated_at from users where username = $1
+select id, username, password, fullname, created_at, updated_at from users where username = $1
 `
 
 func (q *Queries) GetByUsername(ctx context.Context, username string) (User, error) {
@@ -63,7 +63,7 @@ func (q *Queries) GetByUsername(ctx context.Context, username string) (User, err
 		&i.ID,
 		&i.Username,
 		&i.Password,
-		&i.Name,
+		&i.Fullname,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -71,7 +71,7 @@ func (q *Queries) GetByUsername(ctx context.Context, username string) (User, err
 }
 
 const getUsers = `-- name: GetUsers :many
-select id, username, password, name, created_at, updated_at from users
+select id, username, password, fullname, created_at, updated_at from users
 `
 
 func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
@@ -87,7 +87,7 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 			&i.ID,
 			&i.Username,
 			&i.Password,
-			&i.Name,
+			&i.Fullname,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {

@@ -12,7 +12,7 @@ type User struct {
 	ID        pgtype.UUID      `db:"id" json:"id"`
 	Username  string           `db:"username" json:"username"`
 	Password  string           `db:"password" json:"password"`
-	Name      string           `db:"name" json:"name"`
+	Fullname  string           `db:"fullname" json:"fullname"`
 	CreatedAt pgtype.Timestamp `db:"created_at" json:"created_at"`
 	UpdatedAt pgtype.Timestamp `db:"updated_at" json:"updated_at"`
 }
