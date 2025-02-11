@@ -3,7 +3,7 @@ package bootstrap
 import (
 	"context"
 	"fmt"
-	"forum-api/infrastructures/sql/database"
+	"forum-api/commons/sql/database"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"log/slog"
 	"time"
