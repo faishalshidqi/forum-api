@@ -54,10 +54,6 @@ func (sc *SignupController) Signup(c *gin.Context) {
 	c.JSON(http.StatusCreated, domains.SignupResponse{
 		Message: "User created",
 		Status:  "success",
-		Data: domains.SignupResponseData{
-			ID:       user.ID,
-			Username: user.Username,
-			FullName: user.FullName,
-		},
+		Data:    user,
 	})
 }
