@@ -1,6 +1,9 @@
 package domains
 
-import "context"
+import (
+	"context"
+	"forum-api/commons/sql/database"
+)
 
 type SignupRequest struct {
 	Username string `json:"username" binding:"required"`
@@ -22,5 +25,5 @@ type SignupResponseData struct {
 
 type SignupUsecase interface {
 	Create(c context.Context, user *SignupRequest) (SignupResponseData, error)
-	GetUserByUsername(c context.Context, username string) (User, error)
+	GetUserByUsername(c context.Context, username string) (database.User, error)
 }
