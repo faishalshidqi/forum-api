@@ -8,12 +8,12 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type userRepository struct {
+type postgresUserRepository struct {
 	database bootstrap.Database
 }
 
-func (ur *userRepository) Add(ctx context.Context, user domains.SignupRequest) (domains.SignupResponseData, error) {
-	returned, err := ur.database.Query.CreateUser(
+func (pur *postgresUserRepository) Add(ctx context.Context, user domains.SignupRequest) (domains.SignupResponseData, error) {
+	returned, err := pur.database.Query.CreateUser(
 		ctx,
 		database.CreateUserParams{
 			Username: user.Username,
@@ -31,8 +31,8 @@ func (ur *userRepository) Add(ctx context.Context, user domains.SignupRequest) (
 	return returnedData, nil
 }
 
-func (ur *userRepository) Fetch(ctx context.Context) ([]domains.User, error) {
-	users, err := ur.database.Query.GetUsers(ctx)
+func (pur *postgresUserRepository) Fetch(ctx context.Context) ([]domains.User, error) {
+	users, err := pur.database.Query.GetUsers(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -43,21 +43,21 @@ func (ur *userRepository) Fetch(ctx context.Context) ([]domains.User, error) {
 	return domainsUsers, err
 }
 
-func (ur *userRepository) GetByUsername(ctx context.Context, username string) (domains.User, error) {
-	user, err := ur.database.Query.GetByUsername(ctx, username)
+func (pur *postgresUserRepository) GetByUsername(ctx context.Context, username string) (domains.User, error) {
+	user, err := pur.database.Query.GetByUsername(ctx, username)
 	if err != nil {
 		return domains.User{}, err
 	}
 	return user.ToDomainsUser(), nil
 }
 
-func (ur *userRepository) GetByID(ctx context.Context, id string) (domains.User, error) {
+func (pur *postgresUserRepository) GetByID(ctx context.Context, id string) (domains.User, error) {
 	uuid := pgtype.UUID{}
 	err := uuid.Scan(id)
 	if err != nil {
 		return domains.User{}, err
 	}
-	user, err := ur.database.Query.GetByID(ctx, uuid)
+	user, err := pur.database.Query.GetByID(ctx, uuid)
 	if err != nil {
 		return domains.User{}, err
 	}
@@ -65,7 +65,7 @@ func (ur *userRepository) GetByID(ctx context.Context, id string) (domains.User,
 }
 
 func NewUserRepository(database bootstrap.Database) domains.UserRepository {
-	return &userRepository{
+	return &postgresUserRepository{
 		database: database,
 	}
 }
