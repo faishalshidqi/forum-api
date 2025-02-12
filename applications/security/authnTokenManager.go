@@ -1,13 +1,13 @@
 package security
 
 import (
-	"forum-api/commons/sql/database"
+	"forum-api/domains"
 	"net/http"
 	"time"
 )
 
 type AuthnTokenManager interface {
-	CreateToken(user database.User, secret string, expiresIn time.Duration) (string, error)
+	CreateToken(user domains.User, secret string, expiresIn time.Duration) (string, error)
 	VerifyToken(tokenString string, secret string) (string, error)
 	GetBearerToken(header http.Header) (string, error)
 }
