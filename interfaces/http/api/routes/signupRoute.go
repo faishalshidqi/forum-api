@@ -11,7 +11,7 @@ import (
 )
 
 func NewSignupRouter(env *bootstrap.Env, timeout time.Duration, db bootstrap.Database, router *gin.RouterGroup) {
-	userRepository := repository.NewUserRepository(db)
+	userRepository := repository.NewPostgresUserRepository(db)
 	passwordHash := security.NewBcryptPasswordHash()
 	signupController := controllers.SignupController{
 		SignupUsecase: usecase.NewSignupUsecase(userRepository, timeout),

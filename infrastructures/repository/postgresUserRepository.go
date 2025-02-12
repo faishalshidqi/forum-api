@@ -64,7 +64,7 @@ func (pur *postgresUserRepository) GetByID(ctx context.Context, id string) (doma
 	return user.ToDomainsUser(), nil
 }
 
-func NewUserRepository(database bootstrap.Database) domains.UserRepository {
+func NewPostgresUserRepository(database bootstrap.Database) domains.UserRepository {
 	return &postgresUserRepository{
 		database: database,
 	}
