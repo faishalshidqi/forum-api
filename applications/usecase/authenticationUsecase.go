@@ -10,7 +10,12 @@ import (
 type authenticationUsecase struct {
 	userRepository domains.UserRepository
 	tokenManager   security.AuthnTokenManager
+	passwordHash   security.PasswordHash
 	contextTimeout time.Duration
+}
+
+func (au *authenticationUsecase) CheckPasswordHash(password, hash string) error {
+	return au.passwordHash.CheckPasswordHash(password, hash)
 }
 
 func (au *authenticationUsecase) GetUserByID(c context.Context, id string) (domains.User, error) {
