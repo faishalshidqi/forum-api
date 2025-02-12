@@ -9,6 +9,16 @@ type LoginRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
+type LoginResponse struct {
+	Status string            `json:"status"`
+	Data   LoginResponseData `json:"data"`
+}
+
+type LoginResponseData struct {
+	AccessToken  string `json:"accessToken"`
+	RefreshToken string `json:"refreshToken"`
+}
+
 type AuthenticationUsecase interface {
 	GetUserByUsername(c context.Context, username string) (User, error)
 	GetUserByID(c context.Context, id string) (User, error)
