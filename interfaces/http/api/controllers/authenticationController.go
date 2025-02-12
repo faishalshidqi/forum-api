@@ -23,7 +23,7 @@ func (au *AuthenticationController) Login(c *gin.Context) {
 	}
 	user, err := au.AuthenticationUsecase.GetUserByUsername(c, loginRequest.Username)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, domains.ErrorResponse{
+		c.JSON(http.StatusBadRequest, domains.ErrorResponse{
 			Status:  "fail",
 			Message: "Invalid username or password",
 		})
