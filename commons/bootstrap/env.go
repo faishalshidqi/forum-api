@@ -7,13 +7,17 @@ import (
 )
 
 type Env struct {
-	ServerAddr     string `mapstructure:"SERVER_ADDRESS"`
-	ContextTimeout int    `mapstructure:"CONTEXT_TIMEOUT"`
-	PGUser         string `mapstructure:"PGUSER"`
-	PGPassword     string `mapstructure:"PGPASSWORD"`
-	PGHost         string `mapstructure:"PGHOST"`
-	PGPort         string `mapstructure:"PGPORT"`
-	PGDatabase     string `mapstructure:"PGDATABASE"`
+	ServerAddr      string `mapstructure:"SERVER_ADDRESS"`
+	ContextTimeout  int    `mapstructure:"CONTEXT_TIMEOUT"`
+	AccessTokenKey  string `mapstructure:"ACCESS_TOKEN_KEY"`
+	RefreshTokenKey string `mapstructure:"REFRESH_TOKEN_KEY"`
+	AccessTokenAge  int    `mapstructure:"ACCESS_TOKEN_AGE"`
+	RefreshTokenAge int    `mapstructure:"REFRESH_TOKEN_AGE"`
+	PGUser          string `mapstructure:"PGUSER"`
+	PGPassword      string `mapstructure:"PGPASSWORD"`
+	PGHost          string `mapstructure:"PGHOST"`
+	PGPort          string `mapstructure:"PGPORT"`
+	PGDatabase      string `mapstructure:"PGDATABASE"`
 
 	MaxConnections    int
 	MinConnections    int
