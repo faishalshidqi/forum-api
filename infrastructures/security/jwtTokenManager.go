@@ -11,9 +11,7 @@ import (
 	"time"
 )
 
-type jwtTokenManager struct {
-	authnTokenManager security.AuthnTokenManager
-}
+type jwtTokenManager struct{}
 
 func (jtm *jwtTokenManager) GetBearerToken(header http.Header) (string, error) {
 	headers := header.Get("Authorization")
@@ -92,8 +90,6 @@ func (jtm *jwtTokenManager) VerifyToken(tokenString string, secret string) (stri
 	return claims.Subject, nil
 }
 
-func NewJwtTokenManager(authnTokenManager security.AuthnTokenManager) security.AuthnTokenManager {
-	return &jwtTokenManager{
-		authnTokenManager: authnTokenManager,
-	}
+func NewJwtTokenManager() security.AuthnTokenManager {
+	return &jwtTokenManager{}
 }
