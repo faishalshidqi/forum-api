@@ -52,10 +52,11 @@ func (au *authenticationUsecase) CreateRefreshToken(user domains.User, secret st
 	return
 }
 
-func NewAuthenticationUsecase(userRepository domains.UserRepository, tokenManager security.AuthnTokenManager, timeout time.Duration) domains.AuthenticationUsecase {
+func NewAuthenticationUsecase(userRepository domains.UserRepository, tokenManager security.AuthnTokenManager, passwordHash security.PasswordHash, timeout time.Duration) domains.AuthenticationUsecase {
 	return &authenticationUsecase{
 		userRepository: userRepository,
 		tokenManager:   tokenManager,
+		passwordHash:   passwordHash,
 		contextTimeout: timeout,
 	}
 }
