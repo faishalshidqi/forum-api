@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 	"forum-api/commons/bootstrap"
-	"forum-api/commons/sql/database"
 	"forum-api/domains"
+	"forum-api/infrastructures/sql/database"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -31,28 +31,37 @@ func (ur *userRepository) Add(ctx context.Context, user domains.SignupRequest) (
 	return returnedData, nil
 }
 
-func (ur *userRepository) Fetch(ctx context.Context) ([]database.User, error) {
+func (ur *userRepository) Fetch(ctx context.Context) ([]domains.User, error) {
 	users, err := ur.database.Query.GetUsers(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return users, err
+	domainsUsers := make([]domains.User, 0)
+	for _, user := range users {
+		domainsUsers = append(domainsUsers, user.ToDomainsUser())
+	}
+	return domainsUsers, err
 }
 
-func (ur *userRepository) GetByUsername(ctx context.Context, username string) (database.User, error) {
+func (ur *userRepository) GetByUsername(ctx context.Context, username string) (domains.User, error) {
 	user, err := ur.database.Query.GetByUsername(ctx, username)
 	if err != nil {
-		return database.User{}, err
+		return domains.User{}, err
 	}
-	return user, nil
+	return user.ToDomainsUser(), nil
 }
 
-func (ur *userRepository) GetByID(ctx context.Context, id pgtype.UUID) (database.User, error) {
-	user, err := ur.database.Query.GetByID(ctx, id)
+func (ur *userRepository) GetByID(ctx context.Context, id string) (domains.User, error) {
+	uuid := pgtype.UUID{}
+	err := uuid.Scan(id)
 	if err != nil {
-		return database.User{}, err
+		return domains.User{}, err
 	}
-	return user, nil
+	user, err := ur.database.Query.GetByID(ctx, uuid)
+	if err != nil {
+		return domains.User{}, err
+	}
+	return user.ToDomainsUser(), nil
 }
 
 func NewUserRepository(database bootstrap.Database) domains.UserRepository {
