@@ -1,0 +1,50 @@
+package usecase
+
+import (
+	"context"
+	"forum-api/applications/security"
+	"forum-api/domains"
+	"time"
+)
+
+type authenticationUsecase struct {
+	userRepository domains.UserRepository
+	tokenManager   security.AuthnTokenManager
+	contextTimeout time.Duration
+}
+
+func (au authenticationUsecase) GetUserByID(c context.Context, id string) (domains.User, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (au authenticationUsecase) ValidateToken(token, secret string) (string, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (au authenticationUsecase) GetUserByUsername(c context.Context, username string) (domains.User, error) {
+	user, err := au.userRepository.GetByUsername(c, username)
+	if err != nil {
+		return domains.User{}, err
+	}
+	return user, nil
+}
+
+func (au authenticationUsecase) CreateAccessToken(user domains.User, secret string, expiry int) (accessToken string, err error) {
+	accessToken, err = au.tokenManager.CreateToken(user, secret, time.Duration(expiry)*time.Hour)
+	return
+}
+
+func (au authenticationUsecase) CreateRefreshToken(user domains.User, secret string, expiry int) (refreshToken string, err error) {
+	refreshToken, err = au.tokenManager.CreateToken(user, secret, time.Duration(expiry)*time.Hour)
+	return
+}
+
+func NewAuthenticationUsecase(userRepository domains.UserRepository, tokenManager security.AuthnTokenManager, timeout time.Duration) domains.AuthenticationUsecase {
+	return authenticationUsecase{
+		userRepository: userRepository,
+		tokenManager:   tokenManager,
+		contextTimeout: timeout,
+	}
+}
