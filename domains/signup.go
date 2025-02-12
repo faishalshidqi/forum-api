@@ -2,7 +2,6 @@ package domains
 
 import (
 	"context"
-	"forum-api/commons/sql/database"
 )
 
 type SignupRequest struct {
@@ -25,5 +24,5 @@ type SignupResponseData struct {
 
 type SignupUsecase interface {
 	Create(c context.Context, user *SignupRequest) (SignupResponseData, error)
-	GetUserByUsername(c context.Context, username string) (database.User, error)
+	GetUserByUsername(c context.Context, username string) (User, error)
 }
