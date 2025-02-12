@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"forum-api/commons/sql/database"
 	"forum-api/domains"
 	"time"
 )
@@ -18,7 +17,7 @@ func (su *signupUsecase) Create(c context.Context, user *domains.SignupRequest) 
 	return su.userRepository.Add(ctx, *user)
 }
 
-func (su *signupUsecase) GetUserByUsername(c context.Context, username string) (database.User, error) {
+func (su *signupUsecase) GetUserByUsername(c context.Context, username string) (domains.User, error) {
 	ctx, cancel := context.WithTimeout(c, su.contextTimeout)
 	defer cancel()
 	return su.userRepository.GetByUsername(ctx, username)
