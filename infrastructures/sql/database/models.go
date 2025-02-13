@@ -8,6 +8,11 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type RefreshToken struct {
+	Token string      `db:"token" json:"token"`
+	Owner pgtype.UUID `db:"owner" json:"owner"`
+}
+
 type User struct {
 	ID        pgtype.UUID      `db:"id" json:"id"`
 	Username  string           `db:"username" json:"username"`
