@@ -19,6 +19,10 @@ type AuthnResponseData struct {
 	RefreshToken string `json:"refreshToken"`
 }
 
+type RefreshRequest struct {
+	RefreshToken string `json:"refreshToken" binding:"required"`
+}
+
 type AuthenticationUsecase interface {
 	GetUserByUsername(c context.Context, username string) (User, error)
 	GetUserByID(c context.Context, id string) (User, error)
