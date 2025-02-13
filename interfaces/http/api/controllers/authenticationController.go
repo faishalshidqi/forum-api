@@ -76,6 +76,19 @@ func (ac *AuthenticationController) Login(c *gin.Context) {
 	})
 }
 
+// RefreshToken Refresh Authentication, generating new access and refresh token godoc
+//
+//	@Summary		Refresh Authentication
+//	@Description	Generating new access token using a refresh token. Only valid refresh token will generate new
+//	@Tags			authentication
+//	@Accept			json
+//	@Produce		json
+//	@Param			refreshToken	body		string	true	"refresh token possessed by the user"
+//	@Success		200				{object}	domains.RefreshResponse
+//	@Failure		400				{object}	domains.ErrorResponse
+//	@Failure		401				{object}	domains.ErrorResponse
+//	@Failure		500				{object}	domains.ErrorResponse
+//	@Router			/authentications [put]
 func (ac *AuthenticationController) RefreshToken(c *gin.Context) {
 	refreshRequest := domains.RefreshRequest{}
 	if err := c.ShouldBind(&refreshRequest); err != nil {
