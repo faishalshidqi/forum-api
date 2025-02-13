@@ -9,18 +9,27 @@ type LoginRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
-type AuthenticationResponse struct {
+type LoginResponse struct {
 	Status string            `json:"status"`
-	Data   AuthnResponseData `json:"data"`
+	Data   LoginResponseData `json:"data"`
 }
 
-type AuthnResponseData struct {
+type LoginResponseData struct {
 	AccessToken  string `json:"accessToken"`
 	RefreshToken string `json:"refreshToken"`
 }
 
 type RefreshRequest struct {
 	RefreshToken string `json:"refreshToken" binding:"required"`
+}
+
+type RefreshResponse struct {
+	Status string              `json:"status"`
+	Data   RefreshResponseData `json:"data"`
+}
+
+type RefreshResponseData struct {
+	AccessToken string `json:"accessToken"`
 }
 
 type AuthenticationUsecase interface {
