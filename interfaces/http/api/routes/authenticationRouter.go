@@ -14,9 +14,11 @@ func newAuthnRouter(env *bootstrap.Env, timeout time.Duration, db bootstrap.Data
 	userRepository := repository.NewPostgresUserRepository(db)
 	tokenManager := security.NewJwtTokenManager()
 	passwordHash := security.NewBcryptPasswordHash()
+	refreshTokenRepository := repository.NewPostgresRefreshTokenRepository(db)
 	authenticationController := controllers.AuthenticationController{
-		AuthenticationUsecase: usecase.NewAuthenticationUsecase(userRepository, tokenManager, passwordHash, timeout),
-		Env:                   env,
+		AuthenticationUsecase:  usecase.NewAuthenticationUsecase(userRepository, tokenManager, passwordHash, timeout),
+		RefreshTokenRepository: refreshTokenRepository,
+		Env:                    env,
 	}
 	router.POST("/authentications", authenticationController.Login)
 	router.PUT("/authentications", authenticationController.RefreshToken)

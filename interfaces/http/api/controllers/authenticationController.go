@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"forum-api/commons/bootstrap"
 	"forum-api/domains"
 	"github.com/gin-gonic/gin"
@@ -8,8 +9,9 @@ import (
 )
 
 type AuthenticationController struct {
-	AuthenticationUsecase domains.AuthenticationUsecase
-	Env                   *bootstrap.Env
+	AuthenticationUsecase  domains.AuthenticationUsecase
+	RefreshTokenRepository domains.RefreshTokenRepository
+	Env                    *bootstrap.Env
 }
 
 // Login Log In godoc
@@ -67,6 +69,14 @@ func (ac *AuthenticationController) Login(c *gin.Context) {
 		})
 		return
 	}
+	err = ac.RefreshTokenRepository.Add(c, refreshToken)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, domains.ErrorResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusCreated, domains.LoginResponse{
 		Status: "success",
 		Data: domains.LoginResponseData{
@@ -102,7 +112,15 @@ func (ac *AuthenticationController) RefreshToken(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, domains.ErrorResponse{
 			Status:  "fail",
-			Message: "Invalid refresh token. " + err.Error(),
+			Message: fmt.Sprintf("Invalid refresh token: %s", err.Error()),
+		})
+		return
+	}
+	_, err = ac.RefreshTokenRepository.Fetch(c, refreshRequest.RefreshToken)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, domains.ErrorResponse{
+			Status:  "fail",
+			Message: "Invalid refresh token",
 		})
 		return
 	}
