@@ -21,7 +21,7 @@ type AuthenticationController struct {
 //	@Produce		json
 //	@Param			username	body		string	true	"username address of the user"
 //	@Param			password	body		string	true	"password of the user"
-//	@Success		201			{object}	domains.LoginResponse
+//	@Success		201			{object}	domains.AuthenticationResponse
 //	@Failure		400			{object}	domains.ErrorResponse
 //	@Failure		401			{object}	domains.ErrorResponse
 //	@Failure		500			{object}	domains.ErrorResponse
@@ -67,9 +67,9 @@ func (au *AuthenticationController) Login(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusCreated, domains.LoginResponse{
+	c.JSON(http.StatusCreated, domains.AuthenticationResponse{
 		Status: "success",
-		Data: domains.LoginResponseData{
+		Data: domains.AuthnResponseData{
 			AccessToken:  accessToken,
 			RefreshToken: refreshToken,
 		},

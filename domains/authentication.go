@@ -9,12 +9,12 @@ type LoginRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
-type LoginResponse struct {
+type AuthenticationResponse struct {
 	Status string            `json:"status"`
-	Data   LoginResponseData `json:"data"`
+	Data   AuthnResponseData `json:"data"`
 }
 
-type LoginResponseData struct {
+type AuthnResponseData struct {
 	AccessToken  string `json:"accessToken"`
 	RefreshToken string `json:"refreshToken"`
 }
