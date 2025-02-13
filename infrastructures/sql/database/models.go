@@ -9,8 +9,7 @@ import (
 )
 
 type RefreshToken struct {
-	Token string      `db:"token" json:"token"`
-	Owner pgtype.UUID `db:"owner" json:"owner"`
+	Token string `db:"token" json:"token"`
 }
 
 type User struct {

@@ -7,44 +7,34 @@ package database
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const addToken = `-- name: AddToken :one
-insert into refresh_tokens (token, owner) values($1, $2) returning token, owner
+insert into refresh_tokens (token) values($1) returning token
 `
 
-type AddTokenParams struct {
-	Token string      `db:"token" json:"token"`
-	Owner pgtype.UUID `db:"owner" json:"owner"`
-}
-
-func (q *Queries) AddToken(ctx context.Context, arg AddTokenParams) (RefreshToken, error) {
-	row := q.db.QueryRow(ctx, addToken, arg.Token, arg.Owner)
-	var i RefreshToken
-	err := row.Scan(&i.Token, &i.Owner)
-	return i, err
+func (q *Queries) AddToken(ctx context.Context, token string) (string, error) {
+	row := q.db.QueryRow(ctx, addToken, token)
+	err := row.Scan(&token)
+	return token, err
 }
 
 const deleteToken = `-- name: DeleteToken :one
-delete from refresh_tokens where token = $1 returning token, owner
+delete from refresh_tokens where token = $1 returning token
 `
 
-func (q *Queries) DeleteToken(ctx context.Context, token string) (RefreshToken, error) {
+func (q *Queries) DeleteToken(ctx context.Context, token string) (string, error) {
 	row := q.db.QueryRow(ctx, deleteToken, token)
-	var i RefreshToken
-	err := row.Scan(&i.Token, &i.Owner)
-	return i, err
+	err := row.Scan(&token)
+	return token, err
 }
 
 const getToken = `-- name: GetToken :one
-select token, owner from refresh_tokens where token = $1
+select token from refresh_tokens where token = $1
 `
 
-func (q *Queries) GetToken(ctx context.Context, token string) (RefreshToken, error) {
+func (q *Queries) GetToken(ctx context.Context, token string) (string, error) {
 	row := q.db.QueryRow(ctx, getToken, token)
-	var i RefreshToken
-	err := row.Scan(&i.Token, &i.Owner)
-	return i, err
+	err := row.Scan(&token)
+	return token, err
 }
