@@ -16,6 +16,56 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/authentications": {
+            "put": {
+                "description": "Generating new access token using a refresh token. Only valid refresh token will generate new",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Refresh Authentication",
+                "parameters": [
+                    {
+                        "description": "refresh token possessed by the user",
+                        "name": "refreshToken",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domains.RefreshResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domains.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/domains.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domains.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "authenticate user",
                 "consumes": [
@@ -52,7 +102,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/domains.AuthenticationResponse"
+                            "$ref": "#/definitions/domains.LoginResponse"
                         }
                     },
                     "400": {
@@ -149,18 +199,29 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "domains.AuthenticationResponse": {
+        "domains.ErrorResponse": {
             "type": "object",
             "properties": {
-                "data": {
-                    "$ref": "#/definitions/domains.AuthnResponseData"
+                "message": {
+                    "type": "string"
                 },
                 "status": {
                     "type": "string"
                 }
             }
         },
-        "domains.AuthnResponseData": {
+        "domains.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/domains.LoginResponseData"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "domains.LoginResponseData": {
             "type": "object",
             "properties": {
                 "accessToken": {
@@ -171,13 +232,21 @@ const docTemplate = `{
                 }
             }
         },
-        "domains.ErrorResponse": {
+        "domains.RefreshResponse": {
             "type": "object",
             "properties": {
-                "message": {
-                    "type": "string"
+                "data": {
+                    "$ref": "#/definitions/domains.RefreshResponseData"
                 },
                 "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "domains.RefreshResponseData": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
                     "type": "string"
                 }
             }

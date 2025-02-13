@@ -1,24 +1,36 @@
 basePath: /
 definitions:
-  domains.AuthenticationResponse:
+  domains.ErrorResponse:
     properties:
-      data:
-        $ref: '#/definitions/domains.AuthnResponseData'
+      message:
+        type: string
       status:
         type: string
     type: object
-  domains.AuthnResponseData:
+  domains.LoginResponse:
+    properties:
+      data:
+        $ref: '#/definitions/domains.LoginResponseData'
+      status:
+        type: string
+    type: object
+  domains.LoginResponseData:
     properties:
       accessToken:
         type: string
       refreshToken:
         type: string
     type: object
-  domains.ErrorResponse:
+  domains.RefreshResponse:
     properties:
-      message:
-        type: string
+      data:
+        $ref: '#/definitions/domains.RefreshResponseData'
       status:
+        type: string
+    type: object
+  domains.RefreshResponseData:
+    properties:
+      accessToken:
         type: string
     type: object
   domains.SignupResponse:
@@ -70,7 +82,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/domains.AuthenticationResponse'
+            $ref: '#/definitions/domains.LoginResponse'
         "400":
           description: Bad Request
           schema:
@@ -84,6 +96,40 @@ paths:
           schema:
             $ref: '#/definitions/domains.ErrorResponse'
       summary: Login with Username & Password
+      tags:
+      - authentication
+    put:
+      consumes:
+      - application/json
+      description: Generating new access token using a refresh token. Only valid refresh
+        token will generate new
+      parameters:
+      - description: refresh token possessed by the user
+        in: body
+        name: refreshToken
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domains.RefreshResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+      summary: Refresh Authentication
       tags:
       - authentication
   /users:
