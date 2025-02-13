@@ -19,4 +19,5 @@ func newAuthnRouter(env *bootstrap.Env, timeout time.Duration, db bootstrap.Data
 		Env:                   env,
 	}
 	router.POST("/authentications", authenticationController.Login)
+	router.PUT("/authentications", authenticationController.RefreshToken)
 }
