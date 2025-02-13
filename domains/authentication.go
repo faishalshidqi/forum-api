@@ -40,3 +40,9 @@ type AuthenticationUsecase interface {
 	ValidateToken(token, secret string) (string, error)
 	CheckPasswordHash(password, hash string) error
 }
+
+type RefreshTokenRepository interface {
+	Add(c context.Context, refreshRequest RefreshRequest) error
+	Fetch(c context.Context, refreshToken string) (RefreshRequest, error)
+	Delete(c context.Context, refreshToken string) error
+}
