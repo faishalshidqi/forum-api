@@ -7,6 +7,20 @@ definitions:
       status:
         type: string
     type: object
+  domains.LoginResponse:
+    properties:
+      data:
+        $ref: '#/definitions/domains.LoginResponseData'
+      status:
+        type: string
+    type: object
+  domains.LoginResponseData:
+    properties:
+      accessToken:
+        type: string
+      refreshToken:
+        type: string
+    type: object
   domains.SignupResponse:
     properties:
       data:
@@ -32,6 +46,46 @@ info:
   title: Forum API
   version: "1.0"
 paths:
+  /authentications:
+    post:
+      consumes:
+      - application/json
+      description: authenticate user
+      parameters:
+      - description: username address of the user
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: password of the user
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domains.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+      summary: Login with Username & Password
+      tags:
+      - authentication
   /users:
     post:
       consumes:
