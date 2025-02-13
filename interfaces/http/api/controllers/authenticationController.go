@@ -148,6 +148,19 @@ func (ac *AuthenticationController) RefreshToken(c *gin.Context) {
 	})
 }
 
+// Logout Sign out godoc
+//
+//	@Summary		Sign Out
+//	@Description	Signing User Out. Requires refresh token
+//	@Tags			authentication
+//	@Accept			json
+//	@Produce		json
+//	@Param			refreshToken	body		string	true	"refresh token possessed by the user"
+//	@Success		200				{object}	domains.SuccessResponse
+//	@Failure		400				{object}	domains.ErrorResponse
+//	@Failure		401				{object}	domains.ErrorResponse
+//	@Failure		500				{object}	domains.ErrorResponse
+//	@Router			/authentications [delete]
 func (ac *AuthenticationController) Logout(c *gin.Context) {
 	refreshRequest := domains.RefreshRequest{}
 	if err := c.ShouldBind(&refreshRequest); err != nil {
