@@ -43,6 +43,6 @@ type AuthenticationUsecase interface {
 
 type RefreshTokenRepository interface {
 	Add(c context.Context, refreshToken string) error
-	Fetch(c context.Context, refreshToken string) (RefreshRequest, error)
+	Fetch(c context.Context, refreshToken string) (string, error)
 	Delete(c context.Context, refreshToken string) error
 }
