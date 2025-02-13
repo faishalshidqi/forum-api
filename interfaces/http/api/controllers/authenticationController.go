@@ -21,12 +21,12 @@ type AuthenticationController struct {
 //	@Produce		json
 //	@Param			username	body		string	true	"username address of the user"
 //	@Param			password	body		string	true	"password of the user"
-//	@Success		201			{object}	domains.AuthenticationResponse
+//	@Success		201			{object}	domains.LoginResponse
 //	@Failure		400			{object}	domains.ErrorResponse
 //	@Failure		401			{object}	domains.ErrorResponse
 //	@Failure		500			{object}	domains.ErrorResponse
 //	@Router			/authentications [post]
-func (au *AuthenticationController) Login(c *gin.Context) {
+func (ac *AuthenticationController) Login(c *gin.Context) {
 	loginRequest := domains.LoginRequest{}
 	if err := c.ShouldBind(&loginRequest); err != nil {
 		c.JSON(http.StatusBadRequest, domains.ErrorResponse{
@@ -35,7 +35,7 @@ func (au *AuthenticationController) Login(c *gin.Context) {
 		})
 		return
 	}
-	user, err := au.AuthenticationUsecase.GetUserByUsername(c, loginRequest.Username)
+	user, err := ac.AuthenticationUsecase.GetUserByUsername(c, loginRequest.Username)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, domains.ErrorResponse{
 			Status:  "fail",
@@ -43,7 +43,7 @@ func (au *AuthenticationController) Login(c *gin.Context) {
 		})
 		return
 	}
-	err = au.AuthenticationUsecase.CheckPasswordHash(loginRequest.Password, user.Password)
+	err = ac.AuthenticationUsecase.CheckPasswordHash(loginRequest.Password, user.Password)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, domains.ErrorResponse{
 			Status:  "fail",
@@ -51,7 +51,7 @@ func (au *AuthenticationController) Login(c *gin.Context) {
 		})
 		return
 	}
-	accessToken, err := au.AuthenticationUsecase.CreateAccessToken(user, au.Env.AccessTokenKey, au.Env.AccessTokenAge)
+	accessToken, err := ac.AuthenticationUsecase.CreateAccessToken(user, ac.Env.AccessTokenKey, ac.Env.AccessTokenAge)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domains.ErrorResponse{
 			Status:  "fail",
@@ -59,7 +59,7 @@ func (au *AuthenticationController) Login(c *gin.Context) {
 		})
 		return
 	}
-	refreshToken, err := au.AuthenticationUsecase.CreateRefreshToken(user, au.Env.RefreshTokenKey, au.Env.RefreshTokenAge)
+	refreshToken, err := ac.AuthenticationUsecase.CreateRefreshToken(user, ac.Env.RefreshTokenKey, ac.Env.RefreshTokenAge)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domains.ErrorResponse{
 			Status:  "fail",
@@ -67,11 +67,52 @@ func (au *AuthenticationController) Login(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusCreated, domains.AuthenticationResponse{
+	c.JSON(http.StatusCreated, domains.LoginResponse{
 		Status: "success",
-		Data: domains.AuthnResponseData{
+		Data: domains.LoginResponseData{
 			AccessToken:  accessToken,
 			RefreshToken: refreshToken,
+		},
+	})
+}
+
+func (ac *AuthenticationController) RefreshToken(c *gin.Context) {
+	refreshRequest := domains.RefreshRequest{}
+	if err := c.ShouldBind(&refreshRequest); err != nil {
+		c.JSON(http.StatusBadRequest, domains.ErrorResponse{
+			Status:  "fail",
+			Message: "Invalid request body",
+		})
+		return
+	}
+	id, err := ac.AuthenticationUsecase.ValidateToken(refreshRequest.RefreshToken, ac.Env.RefreshTokenKey)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domains.ErrorResponse{
+			Status:  "fail",
+			Message: "Invalid refresh token. " + err.Error(),
+		})
+		return
+	}
+	user, err := ac.AuthenticationUsecase.GetUserByID(c, id)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, domains.ErrorResponse{
+			Status:  "fail",
+			Message: "user not found",
+		})
+		return
+	}
+	accessToken, err := ac.AuthenticationUsecase.CreateAccessToken(user, ac.Env.AccessTokenKey, ac.Env.AccessTokenAge)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, domains.ErrorResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, domains.RefreshResponse{
+		Status: "success",
+		Data: domains.RefreshResponseData{
+			AccessToken: accessToken,
 		},
 	})
 }
