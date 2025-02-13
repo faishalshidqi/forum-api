@@ -158,7 +158,6 @@ func (ac *AuthenticationController) RefreshToken(c *gin.Context) {
 //	@Param			refreshToken	body		string	true	"refresh token possessed by the user"
 //	@Success		200				{object}	domains.SuccessResponse
 //	@Failure		400				{object}	domains.ErrorResponse
-//	@Failure		401				{object}	domains.ErrorResponse
 //	@Failure		500				{object}	domains.ErrorResponse
 //	@Router			/authentications [delete]
 func (ac *AuthenticationController) Logout(c *gin.Context) {
