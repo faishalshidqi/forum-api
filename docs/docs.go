@@ -52,7 +52,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/domains.LoginResponse"
+                            "$ref": "#/definitions/domains.AuthenticationResponse"
                         }
                     },
                     "400": {
@@ -149,6 +149,28 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "domains.AuthenticationResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/domains.AuthnResponseData"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "domains.AuthnResponseData": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
         "domains.ErrorResponse": {
             "type": "object",
             "properties": {
@@ -156,28 +178,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "domains.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/domains.LoginResponseData"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "domains.LoginResponseData": {
-            "type": "object",
-            "properties": {
-                "accessToken": {
-                    "type": "string"
-                },
-                "refreshToken": {
                     "type": "string"
                 }
             }

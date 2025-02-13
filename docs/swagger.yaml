@@ -1,24 +1,24 @@
 basePath: /
 definitions:
+  domains.AuthenticationResponse:
+    properties:
+      data:
+        $ref: '#/definitions/domains.AuthnResponseData'
+      status:
+        type: string
+    type: object
+  domains.AuthnResponseData:
+    properties:
+      accessToken:
+        type: string
+      refreshToken:
+        type: string
+    type: object
   domains.ErrorResponse:
     properties:
       message:
         type: string
       status:
-        type: string
-    type: object
-  domains.LoginResponse:
-    properties:
-      data:
-        $ref: '#/definitions/domains.LoginResponseData'
-      status:
-        type: string
-    type: object
-  domains.LoginResponseData:
-    properties:
-      accessToken:
-        type: string
-      refreshToken:
         type: string
     type: object
   domains.SignupResponse:
@@ -70,7 +70,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/domains.LoginResponse'
+            $ref: '#/definitions/domains.AuthenticationResponse'
         "400":
           description: Bad Request
           schema:
