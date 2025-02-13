@@ -22,7 +22,7 @@ type SignupController struct {
 //	@Tags			users
 //	@Accept			json
 //	@Produce		json
-//	@Param			email		body		string	true	"email address of the new user, must be unique"	Format(email)
+//	@Param			email		body		string	true	"email address of the new user, must be unique"
 //	@Param			password	body		string	true	"password of the new user"
 //	@Param			name		body		string	true	"name of the new user"
 //	@Success		201			{object}	domains.SignupResponse

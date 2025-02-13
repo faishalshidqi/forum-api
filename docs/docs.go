@@ -141,7 +141,6 @@ const docTemplate = `{
                 "summary": "Register A User",
                 "parameters": [
                     {
-                        "format": "email",
                         "description": "email address of the new user, must be unique",
                         "name": "email",
                         "in": "body",

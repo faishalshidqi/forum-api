@@ -139,7 +139,6 @@ paths:
       description: New user must have a unique email address
       parameters:
       - description: email address of the new user, must be unique
-        format: email
         in: body
         name: email
         required: true
