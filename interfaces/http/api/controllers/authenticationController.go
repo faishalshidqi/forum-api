@@ -147,3 +147,34 @@ func (ac *AuthenticationController) RefreshToken(c *gin.Context) {
 		},
 	})
 }
+
+func (ac *AuthenticationController) Logout(c *gin.Context) {
+	refreshRequest := domains.RefreshRequest{}
+	if err := c.ShouldBind(&refreshRequest); err != nil {
+		c.JSON(http.StatusBadRequest, domains.ErrorResponse{
+			Status:  "fail",
+			Message: "Invalid request body",
+		})
+		return
+	}
+	_, err := ac.RefreshTokenRepository.Fetch(c, refreshRequest.RefreshToken)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domains.ErrorResponse{
+			Status:  "fail",
+			Message: "Invalid refresh token",
+		})
+		return
+	}
+	err = ac.RefreshTokenRepository.Delete(c, refreshRequest.RefreshToken)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, domains.ErrorResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, domains.SuccessResponse{
+		Status:  "success",
+		Message: "Successfully logged out",
+	})
+}
