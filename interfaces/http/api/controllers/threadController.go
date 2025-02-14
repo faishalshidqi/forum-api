@@ -85,8 +85,6 @@ func (tc *ThreadController) GetByThread(c *gin.Context) {
 	c.JSON(http.StatusOK, domains.GetCommentsByThreadResponse{
 		Status:  "success",
 		Message: "Thread fetched successfully",
-		Data: struct {
-			Thread domains.GetThreadByIDResponseData `json:"thread"`
-		}{Thread: thread},
+		Data:    thread,
 	})
 }
