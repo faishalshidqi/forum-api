@@ -9,9 +9,10 @@ import (
 )
 
 type ThreadController struct {
-	ThreadUsecase domains.ThreadUsecase
-	TokenManager  security.AuthnTokenManager
-	Env           *bootstrap.Env
+	ThreadUsecase  domains.ThreadUsecase
+	CommentUsecase domains.CommentUsecase
+	TokenManager   security.AuthnTokenManager
+	Env            *bootstrap.Env
 }
 
 // AddThread Create A New Thread godoc
@@ -66,5 +67,26 @@ func (tc *ThreadController) AddThread(c *gin.Context) {
 		Message: "successfully added thread",
 		Status:  "success",
 		Data:    addedThread,
+	})
+}
+
+func (tc *ThreadController) GetByThread(c *gin.Context) {
+	threadId := c.Param("thread_id")
+	thread, err := tc.ThreadUsecase.GetById(c, threadId)
+	if err != nil {
+		c.JSON(http.StatusNotFound, domains.ErrorResponse{
+			Status:  "fail",
+			Message: "Thread does not exist",
+		})
+		return
+	}
+	comments, _ := tc.CommentUsecase.GetByThread(c, threadId)
+	thread.Comments = comments
+	c.JSON(http.StatusOK, domains.GetCommentsByThreadResponse{
+		Status:  "success",
+		Message: "Thread fetched successfully",
+		Data: struct {
+			Thread domains.GetThreadByIDResponseData `json:"thread"`
+		}{Thread: thread},
 	})
 }
