@@ -13,6 +13,17 @@ type Task struct {
 	Owner string    `json:"owner"`
 }
 
+type AddTaskRequest struct {
+	Title string `json:"title" binding:"required"`
+	Body  string `json:"body" binding:"required"`
+}
+
+type AddTaskResponse struct {
+	Title string `json:"title"`
+	Body  string `json:"body"`
+	Owner string `json:"owner"`
+}
+
 type TaskRepository interface {
 	Add(c context.Context, task Task) (Task, error)
 }
