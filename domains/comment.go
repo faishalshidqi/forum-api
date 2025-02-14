@@ -30,6 +30,22 @@ type AddCommentResponseData struct {
 	Owner   string `json:"owner"`
 }
 
+type GetCommentsByThreadResponse struct {
+	Message string `json:"message"`
+	Status  string `json:"status"`
+	Data    struct {
+		Thread   GetThreadByIDResponseData         `json:"thread"`
+		Comments []GetCommentsByThreadResponseData `json:"comments"`
+	}
+}
+
+type GetCommentsByThreadResponseData struct {
+	ID       string    `json:"id"`
+	Username string    `json:"username"`
+	Date     time.Time `json:"date"`
+	Content  string    `json:"content"`
+}
+
 type CommentRepository interface {
 	Add(c context.Context, commentRequest AddCommentRequest, owner, thread string) (AddCommentResponseData, error)
 	GetByThread(c context.Context, thread string) ([]Comment, error)
