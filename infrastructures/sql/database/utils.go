@@ -23,8 +23,8 @@ func (cur *CreateUserRow) ToSignupResponseData() domains.SignupResponseData {
 	}
 }
 
-func (ctr *CreateThreadRow) ToAddTaskResponseData() domains.AddTaskResponseData {
-	return domains.AddTaskResponseData{
+func (ctr *CreateThreadRow) ToAddThreadResponseData() domains.AddThreadResponseData {
+	return domains.AddThreadResponseData{
 		ID:    ctr.ID.String(),
 		Title: ctr.Title,
 		Owner: ctr.Owner.String(),

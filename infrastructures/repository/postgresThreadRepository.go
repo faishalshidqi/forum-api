@@ -8,15 +8,15 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type postgresTaskRepository struct {
+type postgresThreadRepository struct {
 	database bootstrap.Database
 }
 
-func (ptr *postgresTaskRepository) Add(c context.Context, task domains.Task) (domains.AddTaskResponseData, error) {
+func (ptr *postgresThreadRepository) Add(c context.Context, task domains.Thread) (domains.AddThreadResponseData, error) {
 	uuid := pgtype.UUID{}
 	err := uuid.Scan(task.Owner)
 	if err != nil {
-		return domains.AddTaskResponseData{}, err
+		return domains.AddThreadResponseData{}, err
 	}
 	thread, err := ptr.database.Query.CreateThread(c, database.CreateThreadParams{
 		Title: task.Title,
@@ -24,13 +24,13 @@ func (ptr *postgresTaskRepository) Add(c context.Context, task domains.Task) (do
 		Owner: uuid,
 	})
 	if err != nil {
-		return domains.AddTaskResponseData{}, err
+		return domains.AddThreadResponseData{}, err
 	}
-	return thread.ToAddTaskResponseData(), nil
+	return thread.ToAddThreadResponseData(), nil
 }
 
-func NewPostgresTaskRepository(database bootstrap.Database) domains.TaskRepository {
-	return &postgresTaskRepository{
+func NewPostgresTaskRepository(database bootstrap.Database) domains.ThreadRepository {
+	return &postgresThreadRepository{
 		database: database,
 	}
 }
