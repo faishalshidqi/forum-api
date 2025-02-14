@@ -11,6 +11,12 @@ type threadUsecase struct {
 	contextTimeout time.Duration
 }
 
+func (tu *threadUsecase) GetById(c context.Context, id string) (*domains.Thread, error) {
+	ctx, cancel := context.WithTimeout(c, tu.contextTimeout)
+	defer cancel()
+	return tu.taskRepository.GetById(ctx, id)
+}
+
 func (tu *threadUsecase) Add(c context.Context, task domains.AddThreadRequest, owner string) (domains.AddThreadResponseData, error) {
 	ctx, cancel := context.WithTimeout(c, tu.contextTimeout)
 	defer cancel()

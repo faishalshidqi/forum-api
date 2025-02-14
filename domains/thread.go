@@ -32,8 +32,10 @@ type AddThreadResponseData struct {
 
 type ThreadRepository interface {
 	Add(c context.Context, task AddThreadRequest, owner string) (AddThreadResponseData, error)
+	GetById(c context.Context, id string) (*Thread, error)
 }
 
 type ThreadUsecase interface {
 	Add(c context.Context, task AddThreadRequest, owner string) (AddThreadResponseData, error)
+	GetById(c context.Context, id string) (*Thread, error)
 }
