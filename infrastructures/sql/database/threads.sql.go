@@ -35,18 +35,26 @@ func (q *Queries) CreateThread(ctx context.Context, arg CreateThreadParams) (Cre
 }
 
 const getThreadById = `-- name: GetThreadById :one
-select id, title, body, date, owner from threads where id = $1
+select threads.id, threads.title, threads.body, threads.date, users.username from threads join users on threads.owner = users.id where threads.id = $1
 `
 
-func (q *Queries) GetThreadById(ctx context.Context, id pgtype.UUID) (Thread, error) {
+type GetThreadByIdRow struct {
+	ID       pgtype.UUID      `db:"id" json:"id"`
+	Title    string           `db:"title" json:"title"`
+	Body     string           `db:"body" json:"body"`
+	Date     pgtype.Timestamp `db:"date" json:"date"`
+	Username string           `db:"username" json:"username"`
+}
+
+func (q *Queries) GetThreadById(ctx context.Context, id pgtype.UUID) (GetThreadByIdRow, error) {
 	row := q.db.QueryRow(ctx, getThreadById, id)
-	var i Thread
+	var i GetThreadByIdRow
 	err := row.Scan(
 		&i.ID,
 		&i.Title,
 		&i.Body,
 		&i.Date,
-		&i.Owner,
+		&i.Username,
 	)
 	return i, err
 }

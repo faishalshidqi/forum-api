@@ -31,13 +31,13 @@ func (ctr *CreateThreadRow) ToAddThreadResponseData() domains.AddThreadResponseD
 	}
 }
 
-func (t *Thread) ToDomainsThread() domains.Thread {
+func (t *GetThreadByIdRow) ToDomainsThread() domains.Thread {
 	return domains.Thread{
 		ID:    t.ID.String(),
 		Title: t.Title,
 		Body:  t.Body,
 		Date:  t.Date.Time,
-		Owner: t.Owner.String(),
+		Owner: t.Username,
 	}
 }
 
