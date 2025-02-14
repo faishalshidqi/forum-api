@@ -5,8 +5,8 @@ create table threads(
     title text not null,
     body text not null,
     date timestamp not null default current_timestamp,
-    username uuid not null,
-    foreign key(username) references users(id) on delete cascade
+    owner uuid not null,
+    foreign key(owner) references users(id) on delete cascade
 );
 -- +goose StatementEnd
 
