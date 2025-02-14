@@ -33,3 +33,39 @@ func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) (C
 	err := row.Scan(&i.ID, &i.Content, &i.Owner)
 	return i, err
 }
+
+const getCommentsByThread = `-- name: GetCommentsByThread :many
+select comments.id, users.username, comments.date, comments.content from comments join users on comments.owner = users.id where thread = $1
+`
+
+type GetCommentsByThreadRow struct {
+	ID       pgtype.UUID      `db:"id" json:"id"`
+	Username string           `db:"username" json:"username"`
+	Date     pgtype.Timestamp `db:"date" json:"date"`
+	Content  string           `db:"content" json:"content"`
+}
+
+func (q *Queries) GetCommentsByThread(ctx context.Context, thread pgtype.UUID) ([]GetCommentsByThreadRow, error) {
+	rows, err := q.db.Query(ctx, getCommentsByThread, thread)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetCommentsByThreadRow
+	for rows.Next() {
+		var i GetCommentsByThreadRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Username,
+			&i.Date,
+			&i.Content,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
