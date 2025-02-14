@@ -15,7 +15,7 @@ type Comment struct {
 }
 
 type AddCommentRequest struct {
-	Content string `json:"content"`
+	Content string `json:"content" binding:"required"`
 }
 
 type AddCommentResponse struct {
