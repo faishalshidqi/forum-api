@@ -14,9 +14,9 @@ type Task struct {
 }
 
 type TaskRepository interface {
-	Add(ctx context.Context, task Task) (Task, error)
+	Add(c context.Context, task Task) (Task, error)
 }
 
 type TaskUsecase interface {
-	Add(ctx context.Context, task Task) (Task, error)
+	Add(c context.Context, task Task) (Task, error)
 }

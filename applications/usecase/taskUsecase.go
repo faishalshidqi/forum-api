@@ -11,9 +11,10 @@ type taskUsecase struct {
 	contextTimeout time.Duration
 }
 
-func (tu *taskUsecase) Add(ctx context.Context, task domains.Task) (domains.Task, error) {
-	//TODO implement me
-	panic("implement me")
+func (tu *taskUsecase) Add(c context.Context, task domains.Task) (domains.Task, error) {
+	ctx, cancel := context.WithTimeout(c, tu.contextTimeout)
+	defer cancel()
+	return tu.taskRepository.Add(ctx, task)
 }
 
 func NewTaskUsecase(taskRepository domains.TaskRepository, timeout time.Duration) domains.TaskUsecase {
