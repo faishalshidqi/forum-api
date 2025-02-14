@@ -1,5 +1,23 @@
 basePath: /
 definitions:
+  domains.AddCommentResponse:
+    properties:
+      data:
+        $ref: '#/definitions/domains.AddCommentResponseData'
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  domains.AddCommentResponseData:
+    properties:
+      content:
+        type: string
+      id:
+        type: string
+      owner:
+        type: string
+    type: object
   domains.AddThreadResponse:
     properties:
       data:
@@ -231,6 +249,55 @@ paths:
       summary: Create Thread
       tags:
       - threads
+  /threads/{thread_id}/comments:
+    post:
+      consumes:
+      - application/json
+      description: Creating a new comment. Only valid users can create a comment to
+        a valid thread
+      parameters:
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: content of the comment
+        in: body
+        name: content
+        required: true
+        schema:
+          type: string
+      - description: Thread ID
+        in: path
+        name: thread_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domains.AddCommentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+      summary: Create Comment
+      tags:
+      - comments
   /users:
     post:
       consumes:

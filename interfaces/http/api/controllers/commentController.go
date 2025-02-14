@@ -15,6 +15,22 @@ type CommentController struct {
 	Env            *bootstrap.Env
 }
 
+// AddComment Create Comment godoc
+//
+//	@Summary		Create Comment
+//	@Description	Creating a new comment. Only valid users can create a comment to a valid thread
+//	@Tags			comments
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorization	header		string	true	"Bearer Token"
+//	@Param			content			body		string	true	"content of the comment"
+//	@Param			thread_id		path		string	true	"Thread ID"
+//	@Success		200				{object}	domains.AddCommentResponse
+//	@Failure		400				{object}	domains.ErrorResponse
+//	@Failure		401				{object}	domains.ErrorResponse
+//	@Failure		404				{object}	domains.ErrorResponse
+//	@Failure		500				{object}	domains.ErrorResponse
+//	@Router			/threads/{thread_id}/comments [post]
 func (cc *CommentController) AddComment(c *gin.Context) {
 	token, err := cc.TokenManager.GetBearerToken(c.Request.Header)
 	if err != nil {
