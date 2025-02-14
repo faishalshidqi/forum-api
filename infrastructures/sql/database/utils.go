@@ -22,3 +22,11 @@ func (cur *CreateUserRow) ToSignupResponseData() domains.SignupResponseData {
 		FullName: cur.Fullname,
 	}
 }
+
+func (ctr *CreateThreadRow) ToAddTaskResponseData() domains.AddTaskResponseData {
+	return domains.AddTaskResponseData{
+		ID:    ctr.ID.String(),
+		Title: ctr.Title,
+		Owner: ctr.Owner.String(),
+	}
+}
