@@ -12,17 +12,17 @@ type postgresThreadRepository struct {
 	database bootstrap.Database
 }
 
-func (ptr *postgresThreadRepository) GetById(c context.Context, id string) (domains.Thread, error) {
+func (ptr *postgresThreadRepository) GetById(c context.Context, id string) (domains.GetThreadByIDResponseData, error) {
 	uuid := pgtype.UUID{}
 	err := uuid.Scan(id)
 	if err != nil {
-		return domains.Thread{}, err
+		return domains.GetThreadByIDResponseData{}, err
 	}
 	thread, err := ptr.database.Query.GetThreadById(c, uuid)
 	if err != nil {
-		return domains.Thread{}, err
+		return domains.GetThreadByIDResponseData{}, err
 	}
-	return thread.ToDomainsThread(), nil
+	return thread.ToGetThreadResponseData(), nil
 }
 
 func (ptr *postgresThreadRepository) Add(c context.Context, task domains.AddThreadRequest, owner string) (domains.AddThreadResponseData, error) {
