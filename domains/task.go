@@ -31,9 +31,9 @@ type AddTaskResponseData struct {
 }
 
 type TaskRepository interface {
-	Add(c context.Context, task Task) (Task, error)
+	Add(c context.Context, task Task) (AddTaskResponseData, error)
 }
 
 type TaskUsecase interface {
-	Add(c context.Context, task Task) (Task, error)
+	Add(c context.Context, task Task) (AddTaskResponseData, error)
 }
