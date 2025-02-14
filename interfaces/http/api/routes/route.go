@@ -12,4 +12,5 @@ func Setup(env *bootstrap.Env, timeout time.Duration, db bootstrap.Database, gin
 	newAuthnRouter(env, timeout, db, router)
 
 	newThreadRouter(env, timeout, db, router)
+	newCommentRouter(env, timeout, db, router)
 }
