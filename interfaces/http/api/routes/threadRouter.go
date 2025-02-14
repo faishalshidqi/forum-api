@@ -18,5 +18,5 @@ func newThreadRouter(env *bootstrap.Env, timeout time.Duration, db bootstrap.Dat
 		TokenManager:  tokenManager,
 		Env:           env,
 	}
-	router.POST("/thread", threadController.AddThread)
+	router.POST("/threads", threadController.AddThread)
 }
