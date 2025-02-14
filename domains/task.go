@@ -25,8 +25,8 @@ type AddTaskResponse struct {
 }
 
 type AddTaskResponseData struct {
+	ID    string `json:"id"`
 	Title string `json:"title"`
-	Body  string `json:"body"`
 	Owner string `json:"owner"`
 }
 
