@@ -31,6 +31,16 @@ func (ctr *CreateThreadRow) ToAddThreadResponseData() domains.AddThreadResponseD
 	}
 }
 
+func (t *Thread) ToDomainsThread() domains.Thread {
+	return domains.Thread{
+		ID:    t.ID.String(),
+		Title: t.Title,
+		Body:  t.Body,
+		Date:  t.Date.Time,
+		Owner: t.Owner.String(),
+	}
+}
+
 func (ctr *CreateCommentRow) ToAddCommentResponseData() domains.AddCommentResponseData {
 	return domains.AddCommentResponseData{
 		ID:      ctr.ID.String(),
