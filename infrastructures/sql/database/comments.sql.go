@@ -11,25 +11,25 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const addComment = `-- name: AddComment :one
+const createComment = `-- name: CreateComment :one
 insert into comments(id, owner, thread, content, date) values(gen_random_uuid(), $1, $2, $3, now()) returning id, content, owner
 `
 
-type AddCommentParams struct {
+type CreateCommentParams struct {
 	Owner   pgtype.UUID `db:"owner" json:"owner"`
 	Thread  pgtype.UUID `db:"thread" json:"thread"`
 	Content string      `db:"content" json:"content"`
 }
 
-type AddCommentRow struct {
+type CreateCommentRow struct {
 	ID      pgtype.UUID `db:"id" json:"id"`
 	Content string      `db:"content" json:"content"`
 	Owner   pgtype.UUID `db:"owner" json:"owner"`
 }
 
-func (q *Queries) AddComment(ctx context.Context, arg AddCommentParams) (AddCommentRow, error) {
-	row := q.db.QueryRow(ctx, addComment, arg.Owner, arg.Thread, arg.Content)
-	var i AddCommentRow
+func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) (CreateCommentRow, error) {
+	row := q.db.QueryRow(ctx, createComment, arg.Owner, arg.Thread, arg.Content)
+	var i CreateCommentRow
 	err := row.Scan(&i.ID, &i.Content, &i.Owner)
 	return i, err
 }

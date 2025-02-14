@@ -30,3 +30,11 @@ func (ctr *CreateThreadRow) ToAddThreadResponseData() domains.AddThreadResponseD
 		Owner: ctr.Owner.String(),
 	}
 }
+
+func (ctr *CreateCommentRow) ToAddCommentResponseData() domains.AddCommentResponseData {
+	return domains.AddCommentResponseData{
+		ID:      ctr.ID.String(),
+		Content: ctr.Content,
+		Owner:   ctr.Owner.String(),
+	}
+}

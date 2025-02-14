@@ -11,8 +11,8 @@ type commentUsecase struct {
 	timeout           time.Duration
 }
 
-func (cu *commentUsecase) Add(c context.Context, commentRequest domains.AddCommentRequest, owner string) (domains.AddCommentResponseData, error) {
-	return cu.commentRepository.Add(c, commentRequest, owner)
+func (cu *commentUsecase) Add(c context.Context, commentRequest domains.AddCommentRequest, owner, thread string) (domains.AddCommentResponseData, error) {
+	return cu.commentRepository.Add(c, commentRequest, owner, thread)
 }
 
 func NewCommentUsecase(commentRepository domains.CommentRepository, timeout time.Duration) domains.CommentUsecase {
