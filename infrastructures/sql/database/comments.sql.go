@@ -35,7 +35,7 @@ func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) (C
 }
 
 const getCommentsByThread = `-- name: GetCommentsByThread :many
-select comments.id, users.username, comments.date, comments.content from comments join users on comments.owner = users.id where thread = $1
+select comments.id, users.username, comments.date, comments.content from comments join users on comments.owner = users.id where thread = $1 order by date asc
 `
 
 type GetCommentsByThreadRow struct {
