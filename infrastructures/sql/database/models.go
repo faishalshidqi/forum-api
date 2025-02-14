@@ -12,6 +12,14 @@ type RefreshToken struct {
 	Token string `db:"token" json:"token"`
 }
 
+type Thread struct {
+	ID    pgtype.UUID      `db:"id" json:"id"`
+	Title string           `db:"title" json:"title"`
+	Body  string           `db:"body" json:"body"`
+	Date  pgtype.Timestamp `db:"date" json:"date"`
+	Owner pgtype.UUID      `db:"owner" json:"owner"`
+}
+
 type User struct {
 	ID        pgtype.UUID      `db:"id" json:"id"`
 	Username  string           `db:"username" json:"username"`
