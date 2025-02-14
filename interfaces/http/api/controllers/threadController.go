@@ -9,9 +9,9 @@ import (
 )
 
 type ThreadController struct {
-	TaskUsecase  domains.ThreadUsecase
-	TokenManager security.AuthnTokenManager
-	Env          *bootstrap.Env
+	ThreadUsecase domains.ThreadUsecase
+	TokenManager  security.AuthnTokenManager
+	Env           *bootstrap.Env
 }
 
 func (tc *ThreadController) AddThread(c *gin.Context) {
@@ -39,7 +39,7 @@ func (tc *ThreadController) AddThread(c *gin.Context) {
 		})
 		return
 	}
-	addedThread, err := tc.TaskUsecase.Add(c, addThreadRequest, id)
+	addedThread, err := tc.ThreadUsecase.Add(c, addThreadRequest, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domains.ErrorResponse{
 			Status:  "fail",
