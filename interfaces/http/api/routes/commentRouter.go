@@ -12,9 +12,11 @@ import (
 
 func newCommentRouter(env *bootstrap.Env, timeout time.Duration, db bootstrap.Database, router *gin.RouterGroup) {
 	commentRepository := repository.NewPostgresCommentRepository(db)
+	threadRepository := repository.NewPostgresThreadRepository(db)
 	tokenManager := security.NewJwtTokenManager()
 	commentController := controllers.CommentController{
 		CommentUsecase: usecase.NewCommentUsecase(commentRepository, timeout),
+		ThreadUsecase:  usecase.NewThreadUsecase(threadRepository, timeout),
 		TokenManager:   tokenManager,
 		Env:            env,
 	}
