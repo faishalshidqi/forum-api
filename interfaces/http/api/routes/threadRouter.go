@@ -12,11 +12,14 @@ import (
 
 func newThreadRouter(env *bootstrap.Env, timeout time.Duration, db bootstrap.Database, router *gin.RouterGroup) {
 	threadRepository := repository.NewPostgresThreadRepository(db)
+	commentRepository := repository.NewPostgresCommentRepository(db)
 	tokenManager := security.NewJwtTokenManager()
 	threadController := controllers.ThreadController{
-		ThreadUsecase: usecase.NewThreadUsecase(threadRepository, timeout),
-		TokenManager:  tokenManager,
-		Env:           env,
+		ThreadUsecase:  usecase.NewThreadUsecase(threadRepository, timeout),
+		CommentUsecase: usecase.NewCommentUsecase(commentRepository, timeout),
+		TokenManager:   tokenManager,
+		Env:            env,
 	}
 	router.POST("/threads", threadController.AddThread)
+	router.GET("/threads/:thread_id", threadController.GetByThread)
 }
