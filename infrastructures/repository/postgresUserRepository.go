@@ -53,7 +53,7 @@ func (pur *postgresUserRepository) GetByID(ctx context.Context, id string) (doma
 	if err != nil {
 		return domains.User{}, err
 	}
-	user, err := pur.database.Query.GetByID(ctx, uuid)
+	user, err := pur.database.Query.GetUserByID(ctx, uuid)
 	if err != nil {
 		return domains.User{}, err
 	}

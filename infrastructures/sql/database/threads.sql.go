@@ -33,3 +33,20 @@ func (q *Queries) CreateThread(ctx context.Context, arg CreateThreadParams) (Cre
 	err := row.Scan(&i.ID, &i.Title, &i.Owner)
 	return i, err
 }
+
+const getThreadById = `-- name: GetThreadById :one
+select id, title, body, date, owner from threads where id = $1
+`
+
+func (q *Queries) GetThreadById(ctx context.Context, id pgtype.UUID) (Thread, error) {
+	row := q.db.QueryRow(ctx, getThreadById, id)
+	var i Thread
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Body,
+		&i.Date,
+		&i.Owner,
+	)
+	return i, err
+}

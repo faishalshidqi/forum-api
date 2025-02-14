@@ -7,5 +7,5 @@ select * from users;
 -- name: GetByUsername :one
 select * from users where username = @username;
 
--- name: GetByID :one
+-- name: GetUserByID :one
 select * from users where id = @id;
