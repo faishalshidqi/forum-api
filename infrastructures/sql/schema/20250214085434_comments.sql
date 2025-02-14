@@ -7,7 +7,8 @@ create table comments(
     thread uuid not null,
     foreign key(thread) references threads(id) on update cascade,
     content text not null,
-    date timestamp not null default current_timestamp
+    date timestamp not null default current_timestamp,
+    is_deleted bool not null default false
 );
 -- +goose StatementEnd
 
