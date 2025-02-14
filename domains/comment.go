@@ -34,9 +34,8 @@ type GetCommentsByThreadResponse struct {
 	Message string `json:"message"`
 	Status  string `json:"status"`
 	Data    struct {
-		Thread   GetThreadByIDResponseData         `json:"thread"`
-		Comments []GetCommentsByThreadResponseData `json:"comments"`
-	}
+		Thread GetThreadByIDResponseData `json:"thread"`
+	} `json:"data"`
 }
 
 type GetCommentsByThreadResponseData struct {
