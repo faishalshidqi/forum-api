@@ -8,6 +8,15 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type Comment struct {
+	ID        pgtype.UUID      `db:"id" json:"id"`
+	Owner     pgtype.UUID      `db:"owner" json:"owner"`
+	Thread    pgtype.UUID      `db:"thread" json:"thread"`
+	Content   string           `db:"content" json:"content"`
+	Date      pgtype.Timestamp `db:"date" json:"date"`
+	IsDeleted bool             `db:"is_deleted" json:"is_deleted"`
+}
+
 type RefreshToken struct {
 	Token string `db:"token" json:"token"`
 }
