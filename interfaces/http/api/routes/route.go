@@ -10,4 +10,6 @@ func Setup(env *bootstrap.Env, timeout time.Duration, db bootstrap.Database, gin
 	router := gin.Group("")
 	newSignupRouter(env, timeout, db, router)
 	newAuthnRouter(env, timeout, db, router)
+
+	newThreadRouter(env, timeout, db, router)
 }
