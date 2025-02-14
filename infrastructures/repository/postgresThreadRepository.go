@@ -29,7 +29,7 @@ func (ptr *postgresThreadRepository) Add(c context.Context, task domains.AddThre
 	return thread.ToAddThreadResponseData(), nil
 }
 
-func NewPostgresTaskRepository(database bootstrap.Database) domains.ThreadRepository {
+func NewPostgresThreadRepository(database bootstrap.Database) domains.ThreadRepository {
 	return &postgresThreadRepository{
 		database: database,
 	}
