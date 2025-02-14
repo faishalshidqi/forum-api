@@ -32,8 +32,10 @@ type AddCommentResponseData struct {
 
 type CommentRepository interface {
 	Add(c context.Context, commentRequest AddCommentRequest, owner, thread string) (AddCommentResponseData, error)
+	GetByThread(c context.Context, thread string) ([]Comment, error)
 }
 
 type CommentUsecase interface {
 	Add(c context.Context, commentRequest AddCommentRequest, owner, thread string) (AddCommentResponseData, error)
+	GetByThread(c context.Context, thread string) ([]Comment, error)
 }
