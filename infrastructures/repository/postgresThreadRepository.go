@@ -12,6 +12,19 @@ type postgresThreadRepository struct {
 	database bootstrap.Database
 }
 
+func (ptr *postgresThreadRepository) GetById(c context.Context, id string) (domains.Thread, error) {
+	uuid := pgtype.UUID{}
+	err := uuid.Scan(id)
+	if err != nil {
+		return domains.Thread{}, err
+	}
+	thread, err := ptr.database.Query.GetThreadById(c, uuid)
+	if err != nil {
+		return domains.Thread{}, err
+	}
+	return thread.ToDomainsThread(), nil
+}
+
 func (ptr *postgresThreadRepository) Add(c context.Context, task domains.AddThreadRequest, owner string) (domains.AddThreadResponseData, error) {
 	uuid := pgtype.UUID{}
 	err := uuid.Scan(owner)
