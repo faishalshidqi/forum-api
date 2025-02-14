@@ -31,19 +31,20 @@ type AddThreadResponseData struct {
 }
 
 type GetThreadByIDResponseData struct {
-	ID       string    `json:"id"`
-	Title    string    `json:"title"`
-	Body     string    `json:"body"`
-	Date     time.Time `json:"date"`
-	Username string    `json:"username"`
+	ID       string                            `json:"id"`
+	Title    string                            `json:"title"`
+	Body     string                            `json:"body"`
+	Date     time.Time                         `json:"date"`
+	Username string                            `json:"username"`
+	Comments []GetCommentsByThreadResponseData `json:"comments"`
 }
 
 type ThreadRepository interface {
 	Add(c context.Context, task AddThreadRequest, owner string) (AddThreadResponseData, error)
-	GetById(c context.Context, id string) (Thread, error)
+	GetById(c context.Context, id string) (GetThreadByIDResponseData, error)
 }
 
 type ThreadUsecase interface {
 	Add(c context.Context, task AddThreadRequest, owner string) (AddThreadResponseData, error)
-	GetById(c context.Context, id string) (Thread, error)
+	GetById(c context.Context, id string) (GetThreadByIDResponseData, error)
 }
