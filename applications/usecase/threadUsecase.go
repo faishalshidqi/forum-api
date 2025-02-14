@@ -11,10 +11,10 @@ type threadUsecase struct {
 	contextTimeout time.Duration
 }
 
-func (tu *threadUsecase) Add(c context.Context, task domains.Thread) (domains.AddThreadResponseData, error) {
+func (tu *threadUsecase) Add(c context.Context, task domains.AddThreadRequest, owner string) (domains.AddThreadResponseData, error) {
 	ctx, cancel := context.WithTimeout(c, tu.contextTimeout)
 	defer cancel()
-	return tu.taskRepository.Add(ctx, task)
+	return tu.taskRepository.Add(ctx, task, owner)
 }
 
 func NewThreadUsecase(taskRepository domains.ThreadRepository, timeout time.Duration) domains.ThreadUsecase {

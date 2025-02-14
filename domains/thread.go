@@ -31,9 +31,9 @@ type AddThreadResponseData struct {
 }
 
 type ThreadRepository interface {
-	Add(c context.Context, task Thread) (AddThreadResponseData, error)
+	Add(c context.Context, task AddThreadRequest, owner string) (AddThreadResponseData, error)
 }
 
 type ThreadUsecase interface {
-	Add(c context.Context, task Thread) (AddThreadResponseData, error)
+	Add(c context.Context, task AddThreadRequest, owner string) (AddThreadResponseData, error)
 }
