@@ -10,6 +10,7 @@ import (
 
 type CommentController struct {
 	CommentUsecase domains.CommentUsecase
+	ThreadUsecase  domains.ThreadUsecase
 	TokenManager   security.AuthnTokenManager
 	Env            *bootstrap.Env
 }
@@ -40,6 +41,14 @@ func (cc *CommentController) AddComment(c *gin.Context) {
 		return
 	}
 	threadId := c.Param("thread_id")
+	_, err = cc.ThreadUsecase.GetById(c, threadId)
+	if err != nil {
+		c.JSON(http.StatusNotFound, domains.ErrorResponse{
+			Status:  "fail",
+			Message: "Thread does not exist",
+		})
+		return
+	}
 	addedComment, err := cc.CommentUsecase.Add(c, addCommentRequest, id, threadId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domains.ErrorResponse{
