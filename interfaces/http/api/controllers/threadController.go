@@ -14,6 +14,21 @@ type ThreadController struct {
 	Env           *bootstrap.Env
 }
 
+// AddThread Create A New Thread godoc
+//
+//	@Summary		Create Thread
+//	@Description	Creating a new thread. Only valid users can create a thread
+//	@Tags			threads
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorization	header		string	true	"Bearer Token"
+//	@Param			title			body		string	true	"title of the thread"
+//	@Param			body			body		string	true	"body of the thread"
+//	@Success		201				{object}	domains.AddThreadResponse
+//	@Failure		400				{object}	domains.ErrorResponse
+//	@Failure		401				{object}	domains.ErrorResponse
+//	@Failure		500				{object}	domains.ErrorResponse
+//	@Router			/threads [post]
 func (tc *ThreadController) AddThread(c *gin.Context) {
 	token, err := tc.TokenManager.GetBearerToken(c.Request.Header)
 	if err != nil {
