@@ -19,6 +19,12 @@ type AddTaskRequest struct {
 }
 
 type AddTaskResponse struct {
+	Message string              `json:"message"`
+	Status  string              `json:"status"`
+	Data    AddTaskResponseData `json:"data"`
+}
+
+type AddTaskResponseData struct {
 	Title string `json:"title"`
 	Body  string `json:"body"`
 	Owner string `json:"owner"`
