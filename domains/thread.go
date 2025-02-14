@@ -30,6 +30,14 @@ type AddThreadResponseData struct {
 	Owner string `json:"owner"`
 }
 
+type GetThreadByIDResponseData struct {
+	ID       string    `json:"id"`
+	Title    string    `json:"title"`
+	Body     string    `json:"body"`
+	Date     time.Time `json:"date"`
+	Username string    `json:"username"`
+}
+
 type ThreadRepository interface {
 	Add(c context.Context, task AddThreadRequest, owner string) (AddThreadResponseData, error)
 	GetById(c context.Context, id string) (Thread, error)
