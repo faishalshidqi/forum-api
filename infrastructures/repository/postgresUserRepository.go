@@ -24,11 +24,7 @@ func (pur *postgresUserRepository) Add(ctx context.Context, user domains.SignupR
 	if err != nil {
 		return domains.SignupResponseData{}, err
 	}
-	returnedData := domains.SignupResponseData{}
-	returnedData.ID = returned.ID.String()
-	returnedData.Username = user.Username
-	returnedData.FullName = user.Fullname
-	return returnedData, nil
+	return returned.ToSignupResponseData(), nil
 }
 
 func (pur *postgresUserRepository) Fetch(ctx context.Context) ([]domains.User, error) {
