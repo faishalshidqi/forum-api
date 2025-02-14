@@ -48,3 +48,12 @@ func (ctr *CreateCommentRow) ToAddCommentResponseData() domains.AddCommentRespon
 		Owner:   ctr.Owner.String(),
 	}
 }
+
+func (gcr *GetCommentsByThreadRow) ToGetThreadComments() domains.GetCommentsByThreadResponseData {
+	return domains.GetCommentsByThreadResponseData{
+		ID:       gcr.ID.String(),
+		Username: gcr.Username,
+		Date:     gcr.Date.Time,
+		Content:  gcr.Content,
+	}
+}
