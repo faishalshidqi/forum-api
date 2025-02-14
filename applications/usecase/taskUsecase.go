@@ -11,7 +11,7 @@ type taskUsecase struct {
 	contextTimeout time.Duration
 }
 
-func (tu *taskUsecase) Add(c context.Context, task domains.Task) (domains.Task, error) {
+func (tu *taskUsecase) Add(c context.Context, task domains.Task) (domains.AddTaskResponseData, error) {
 	ctx, cancel := context.WithTimeout(c, tu.contextTimeout)
 	defer cancel()
 	return tu.taskRepository.Add(ctx, task)
