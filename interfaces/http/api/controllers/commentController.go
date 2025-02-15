@@ -95,7 +95,7 @@ func (cc *CommentController) AddComment(c *gin.Context) {
 //	@Failure		403				{object}	domains.ErrorResponse
 //	@Failure		404				{object}	domains.ErrorResponse
 //	@Failure		500				{object}	domains.ErrorResponse
-//	@Router			/threads/{thread_id}/comments [post]
+//	@Router			/threads/{thread_id}/comments [delete]
 func (cc *CommentController) DeleteComment(c *gin.Context) {
 	token, err := cc.TokenManager.GetBearerToken(c.Request.Header)
 	if err != nil {
