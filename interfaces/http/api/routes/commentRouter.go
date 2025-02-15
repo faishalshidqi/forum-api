@@ -21,4 +21,5 @@ func newCommentRouter(env *bootstrap.Env, timeout time.Duration, db bootstrap.Da
 		Env:            env,
 	}
 	router.POST("/threads/:thread_id/comments", commentController.AddComment)
+	router.DELETE("/threads/:thread_id/comments/:comment_id", commentController.DeleteComment)
 }
