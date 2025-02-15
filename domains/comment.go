@@ -46,9 +46,11 @@ type GetCommentsByThreadResponseData struct {
 type CommentRepository interface {
 	Add(c context.Context, commentRequest AddCommentRequest, owner, thread string) (AddCommentResponseData, error)
 	GetByThread(c context.Context, thread string) ([]GetCommentsByThreadResponseData, error)
+	SoftDelete(c context.Context, id string) error
 }
 
 type CommentUsecase interface {
 	Add(c context.Context, commentRequest AddCommentRequest, owner, thread string) (AddCommentResponseData, error)
 	GetByThread(c context.Context, thread string) ([]GetCommentsByThreadResponseData, error)
+	SoftDelete(c context.Context, id string) error
 }
