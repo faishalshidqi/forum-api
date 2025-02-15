@@ -69,3 +69,12 @@ func (q *Queries) GetCommentsByThread(ctx context.Context, thread pgtype.UUID) (
 	}
 	return items, nil
 }
+
+const softDeleteComment = `-- name: SoftDeleteComment :exec
+update comments set is_deleted = true, content = text '**comment is deleted**' where id = $1
+`
+
+func (q *Queries) SoftDeleteComment(ctx context.Context, id pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, softDeleteComment, id)
+	return err
+}
