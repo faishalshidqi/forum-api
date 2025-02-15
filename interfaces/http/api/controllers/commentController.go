@@ -79,3 +79,59 @@ func (cc *CommentController) AddComment(c *gin.Context) {
 		Data:    addedComment,
 	})
 }
+
+func (cc *CommentController) DeleteComment(c *gin.Context) {
+	token, err := cc.TokenManager.GetBearerToken(c.Request.Header)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, domains.ErrorResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+		return
+	}
+	id, err := cc.TokenManager.VerifyToken(token, cc.Env.AccessTokenKey)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, domains.ErrorResponse{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+		return
+	}
+	threadId := c.Param("thread_id")
+	_, err = cc.ThreadUsecase.GetById(c, threadId)
+	if err != nil {
+		c.JSON(http.StatusNotFound, domains.ErrorResponse{
+			Status:  "fail",
+			Message: "Thread does not exist",
+		})
+		return
+	}
+	commentId := c.Param("comment_id")
+	comment, err := cc.CommentUsecase.GetById(c, commentId)
+	if err != nil {
+		c.JSON(http.StatusNotFound, domains.ErrorResponse{
+			Status:  "fail",
+			Message: "Comment does not exist",
+		})
+		return
+	}
+	if id != comment.Owner {
+		c.JSON(http.StatusForbidden, domains.ErrorResponse{
+			Status:  "fail",
+			Message: "You are not allowed to delete this comment",
+		})
+		return
+	}
+	err = cc.CommentUsecase.SoftDelete(c, commentId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, domains.ErrorResponse{
+			Status:  "fail",
+			Message: "Failed to delete comment",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, domains.SuccessResponse{
+		Status:  "success",
+		Message: "Comment deleted successfully",
+	})
+}
