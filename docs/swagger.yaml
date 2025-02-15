@@ -1,350 +1,420 @@
-basePath: /
-definitions:
-  domains.AddCommentResponse:
-    properties:
-      data:
-        $ref: '#/definitions/domains.AddCommentResponseData'
-      message:
-        type: string
-      status:
-        type: string
-    type: object
-  domains.AddCommentResponseData:
-    properties:
-      content:
-        type: string
-      id:
-        type: string
-      owner:
-        type: string
-    type: object
-  domains.AddThreadResponse:
-    properties:
-      data:
-        $ref: '#/definitions/domains.AddThreadResponseData'
-      message:
-        type: string
-      status:
-        type: string
-    type: object
-  domains.AddThreadResponseData:
-    properties:
-      id:
-        type: string
-      owner:
-        type: string
-      title:
-        type: string
-    type: object
-  domains.ErrorResponse:
-    properties:
-      message:
-        type: string
-      status:
-        type: string
-    type: object
-  domains.LoginResponse:
-    properties:
-      data:
-        $ref: '#/definitions/domains.LoginResponseData'
-      status:
-        type: string
-    type: object
-  domains.LoginResponseData:
-    properties:
-      accessToken:
-        type: string
-      refreshToken:
-        type: string
-    type: object
-  domains.RefreshResponse:
-    properties:
-      data:
-        $ref: '#/definitions/domains.RefreshResponseData'
-      status:
-        type: string
-    type: object
-  domains.RefreshResponseData:
-    properties:
-      accessToken:
-        type: string
-    type: object
-  domains.SignupResponse:
-    properties:
-      data:
-        $ref: '#/definitions/domains.SignupResponseData'
-      message:
-        type: string
-      status:
-        type: string
-    type: object
-  domains.SignupResponseData:
-    properties:
-      fullname:
-        type: string
-      id:
-        type: string
-      username:
-        type: string
-    type: object
-  domains.SuccessResponse:
-    properties:
-      message:
-        type: string
-      status:
-        type: string
-    type: object
-host: localhost:9000
+components:
+  schemas:
+    domains.AddCommentResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/domains.AddCommentResponseData'
+        message:
+          type: string
+        status:
+          type: string
+      type: object
+    domains.AddCommentResponseData:
+      properties:
+        content:
+          type: string
+        id:
+          type: string
+        owner:
+          type: string
+      type: object
+    domains.AddThreadResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/domains.AddThreadResponseData'
+        message:
+          type: string
+        status:
+          type: string
+      type: object
+    domains.AddThreadResponseData:
+      properties:
+        id:
+          type: string
+        owner:
+          type: string
+        title:
+          type: string
+      type: object
+    domains.ErrorResponse:
+      properties:
+        message:
+          type: string
+        status:
+          type: string
+      type: object
+    domains.LoginResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/domains.LoginResponseData'
+        status:
+          type: string
+      type: object
+    domains.LoginResponseData:
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+      type: object
+    domains.RefreshResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/domains.RefreshResponseData'
+        status:
+          type: string
+      type: object
+    domains.RefreshResponseData:
+      properties:
+        accessToken:
+          type: string
+      type: object
+    domains.SignupResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/domains.SignupResponseData'
+        message:
+          type: string
+        status:
+          type: string
+      type: object
+    domains.SignupResponseData:
+      properties:
+        fullname:
+          type: string
+        id:
+          type: string
+        username:
+          type: string
+      type: object
+    domains.SuccessResponse:
+      properties:
+        message:
+          type: string
+        status:
+          type: string
+      type: object
+  securitySchemes:
+    bearerauth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
 info:
-  contact: {}
   description: This is a Forum API
   title: Forum API
   version: "1.0"
+openapi: 3.1.0
 paths:
   /authentications:
     delete:
-      consumes:
-      - application/json
       description: Signing User Out. Requires refresh token
-      parameters:
-      - description: refresh token possessed by the user
-        in: body
-        name: refreshToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        description: refresh token possessed by the user
         required: true
-        schema:
-          type: string
-      produces:
-      - application/json
       responses:
         "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.SuccessResponse'
           description: OK
-          schema:
-            $ref: '#/definitions/domains.SuccessResponse'
         "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Bad Request
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
         "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
       summary: Sign Out
       tags:
       - authentication
     post:
-      consumes:
-      - application/json
       description: authenticate user
-      parameters:
-      - description: username address of the user
-        in: body
-        name: username
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        description: password of the user
         required: true
-        schema:
-          type: string
-      - description: password of the user
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
-      produces:
-      - application/json
       responses:
         "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.LoginResponse'
           description: Created
-          schema:
-            $ref: '#/definitions/domains.LoginResponse'
         "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Bad Request
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
         "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
         "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
       summary: Login with Username & Password
       tags:
       - authentication
     put:
-      consumes:
-      - application/json
       description: Generating new access token using a refresh token. Only valid refresh
         token will generate new
-      parameters:
-      - description: refresh token possessed by the user
-        in: body
-        name: refreshToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        description: refresh token possessed by the user
         required: true
-        schema:
-          type: string
-      produces:
-      - application/json
       responses:
         "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.RefreshResponse'
           description: OK
-          schema:
-            $ref: '#/definitions/domains.RefreshResponse'
         "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Bad Request
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
         "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
         "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
       summary: Refresh Authentication
       tags:
       - authentication
   /threads:
     post:
-      consumes:
-      - application/json
       description: Creating a new thread. Only valid users can create a thread
       parameters:
       - description: Bearer Token
         in: header
         name: Authorization
         required: true
-        type: string
-      - description: title of the thread
-        in: body
-        name: title
-        required: true
         schema:
           type: string
-      - description: body of the thread
-        in: body
-        name: body
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        description: body of the thread
         required: true
-        schema:
-          type: string
-      produces:
-      - application/json
       responses:
         "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.AddThreadResponse'
           description: Created
-          schema:
-            $ref: '#/definitions/domains.AddThreadResponse'
         "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Bad Request
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
         "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
         "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
       summary: Create Thread
       tags:
       - threads
   /threads/{thread_id}/comments:
-    post:
-      consumes:
-      - application/json
+    delete:
       description: Soft Delete a  comment. Only valid users can delete their own comment
       parameters:
       - description: Bearer Token
         in: header
         name: Authorization
         required: true
-        type: string
+        schema:
+          type: string
       - description: Thread ID
         in: path
         name: thread_id
         required: true
-        type: string
+        schema:
+          type: string
       - description: Comment ID
         in: path
         name: comment_id
         required: true
-        type: string
-      produces:
-      - application/json
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
       responses:
         "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.AddCommentResponse'
           description: OK
-          schema:
-            $ref: '#/definitions/domains.AddCommentResponse'
         "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
         "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Forbidden
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
         "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Not Found
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
         "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
       summary: Soft Delete Comment
+      tags:
+      - comments
+    post:
+      description: Creating a new comment. Only valid users can create a comment to
+        a valid thread
+      parameters:
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      - description: Thread ID
+        in: path
+        name: thread_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        description: content of the comment
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.AddCommentResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
+          description: Internal Server Error
+      summary: Create Comment
       tags:
       - comments
   /users:
     post:
-      consumes:
-      - application/json
       description: New user must have a unique email address
-      parameters:
-      - description: email address of the new user, must be unique
-        in: body
-        name: email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        description: name of the new user
         required: true
-        schema:
-          type: string
-      - description: password of the new user
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
-      - description: name of the new user
-        in: body
-        name: name
-        required: true
-        schema:
-          type: string
-      produces:
-      - application/json
       responses:
         "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.SignupResponse'
           description: Created
-          schema:
-            $ref: '#/definitions/domains.SignupResponse'
         "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Bad Request
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
         "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Conflict
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
         "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domains.ErrorResponse'
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
       summary: Register A User
       tags:
       - users
-securityDefinitions:
-  "":
-    in: header
-    name: Authorization
-    type: apiKey
-swagger: "2.0"
+servers:
+- url: localhost:9000
