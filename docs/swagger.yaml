@@ -253,23 +253,21 @@ paths:
     post:
       consumes:
       - application/json
-      description: Creating a new comment. Only valid users can create a comment to
-        a valid thread
+      description: Soft Delete a  comment. Only valid users can delete their own comment
       parameters:
       - description: Bearer Token
         in: header
         name: Authorization
         required: true
         type: string
-      - description: content of the comment
-        in: body
-        name: content
-        required: true
-        schema:
-          type: string
       - description: Thread ID
         in: path
         name: thread_id
+        required: true
+        type: string
+      - description: Comment ID
+        in: path
+        name: comment_id
         required: true
         type: string
       produces:
@@ -279,12 +277,12 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domains.AddCommentResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/domains.ErrorResponse'
         "401":
           description: Unauthorized
+          schema:
+            $ref: '#/definitions/domains.ErrorResponse'
+        "403":
+          description: Forbidden
           schema:
             $ref: '#/definitions/domains.ErrorResponse'
         "404":
@@ -295,7 +293,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/domains.ErrorResponse'
-      summary: Create Comment
+      summary: Soft Delete Comment
       tags:
       - comments
   /users:

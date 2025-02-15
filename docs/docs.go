@@ -240,7 +240,7 @@ const docTemplate = `{
         },
         "/threads/{thread_id}/comments": {
             "post": {
-                "description": "Creating a new comment. Only valid users can create a comment to a valid thread",
+                "description": "Soft Delete a  comment. Only valid users can delete their own comment",
                 "consumes": [
                     "application/json"
                 ],
@@ -250,7 +250,7 @@ const docTemplate = `{
                 "tags": [
                     "comments"
                 ],
-                "summary": "Create Comment",
+                "summary": "Soft Delete Comment",
                 "parameters": [
                     {
                         "type": "string",
@@ -260,18 +260,16 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "content of the comment",
-                        "name": "content",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "type": "string",
                         "description": "Thread ID",
                         "name": "thread_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comment ID",
+                        "name": "comment_id",
                         "in": "path",
                         "required": true
                     }
@@ -283,14 +281,14 @@ const docTemplate = `{
                             "$ref": "#/definitions/domains.AddCommentResponse"
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/domains.ErrorResponse"
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "403": {
+                        "description": "Forbidden",
                         "schema": {
                             "$ref": "#/definitions/domains.ErrorResponse"
                         }
