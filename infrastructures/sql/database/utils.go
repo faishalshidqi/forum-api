@@ -57,3 +57,14 @@ func (gcr *GetCommentsByThreadRow) ToGetThreadComments() domains.GetCommentsByTh
 		Content:  gcr.Content,
 	}
 }
+
+func (c *Comment) ToDomainsComment() domains.Comment {
+	return domains.Comment{
+		ID:        c.ID.String(),
+		Content:   c.Content,
+		Owner:     c.Owner.String(),
+		Thread:    c.Thread.String(),
+		Date:      c.Date.Time,
+		IsDeleted: c.IsDeleted,
+	}
+}
