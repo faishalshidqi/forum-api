@@ -34,6 +34,24 @@ func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) (C
 	return i, err
 }
 
+const getCommentById = `-- name: GetCommentById :one
+select id, owner, thread, content, date, is_deleted from comments where id = $1
+`
+
+func (q *Queries) GetCommentById(ctx context.Context, id pgtype.UUID) (Comment, error) {
+	row := q.db.QueryRow(ctx, getCommentById, id)
+	var i Comment
+	err := row.Scan(
+		&i.ID,
+		&i.Owner,
+		&i.Thread,
+		&i.Content,
+		&i.Date,
+		&i.IsDeleted,
+	)
+	return i, err
+}
+
 const getCommentsByThread = `-- name: GetCommentsByThread :many
 select comments.id, users.username, comments.date, comments.content from comments join users on comments.owner = users.id where thread = $1 order by date asc
 `
