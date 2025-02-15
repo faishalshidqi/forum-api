@@ -11,6 +11,10 @@ type commentUsecase struct {
 	timeout           time.Duration
 }
 
+func (cu *commentUsecase) GetById(c context.Context, commentId string) (domains.GetCommentsByThreadResponseData, error) {
+	return cu.commentRepository.GetById(c, commentId)
+}
+
 func (cu *commentUsecase) SoftDelete(c context.Context, id string) error {
 	return cu.commentRepository.SoftDelete(c, id)
 }
