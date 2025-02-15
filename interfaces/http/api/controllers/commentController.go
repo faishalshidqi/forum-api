@@ -80,6 +80,22 @@ func (cc *CommentController) AddComment(c *gin.Context) {
 	})
 }
 
+// DeleteComment Soft Delete Comment godoc
+//
+//	@Summary		Soft Delete Comment
+//	@Description	Soft Delete a  comment. Only valid users can delete their own comment
+//	@Tags			comments
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorization	header		string	true	"Bearer Token"
+//	@Param			thread_id		path		string	true	"Thread ID"
+//	@Param			comment_id		path		string	true	"Comment ID"
+//	@Success		200				{object}	domains.AddCommentResponse
+//	@Failure		401				{object}	domains.ErrorResponse
+//	@Failure		403				{object}	domains.ErrorResponse
+//	@Failure		404				{object}	domains.ErrorResponse
+//	@Failure		500				{object}	domains.ErrorResponse
+//	@Router			/threads/{thread_id}/comments [post]
 func (cc *CommentController) DeleteComment(c *gin.Context) {
 	token, err := cc.TokenManager.GetBearerToken(c.Request.Header)
 	if err != nil {
