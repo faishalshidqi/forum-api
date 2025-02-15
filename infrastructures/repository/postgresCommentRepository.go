@@ -12,6 +12,19 @@ type postgresCommentRepository struct {
 	database bootstrap.Database
 }
 
+func (pcr *postgresCommentRepository) GetById(c context.Context, commentId string) (domains.Comment, error) {
+	uuid := pgtype.UUID{}
+	err := uuid.Scan(commentId)
+	if err != nil {
+		return domains.Comment{}, err
+	}
+	comment, err := pcr.database.Query.GetCommentById(c, uuid)
+	if err != nil {
+		return domains.Comment{}, err
+	}
+	return comment.ToDomainsComment(), nil
+}
+
 func (pcr *postgresCommentRepository) SoftDelete(c context.Context, id string) error {
 	commentId := pgtype.UUID{}
 	err := commentId.Scan(id)

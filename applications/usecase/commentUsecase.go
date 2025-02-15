@@ -11,7 +11,7 @@ type commentUsecase struct {
 	timeout           time.Duration
 }
 
-func (cu *commentUsecase) GetById(c context.Context, commentId string) (domains.GetCommentsByThreadResponseData, error) {
+func (cu *commentUsecase) GetById(c context.Context, commentId string) (domains.Comment, error) {
 	return cu.commentRepository.GetById(c, commentId)
 }
 
