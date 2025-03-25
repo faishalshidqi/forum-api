@@ -1,23 +1,12 @@
-# Use Go 1.23 bookworm as base image
-FROM golang:1.23-bookworm AS base
+FROM golang:1.24-bookworm AS builder
+WORKDIR /app
+COPY ./ /app
+COPY ./.env /app/.env
+RUN GIN_MODE=release CGO_ENABLED=0 GOOS=linux go build -o /forumapi
 
-# Move to working directory /build
-WORKDIR /build
-
-# Copy the go.mod and go.sum files to the /build directory
-COPY go.mod go.sum ./
-
-# Install dependencies
-RUN go mod download
-
-# Copy the entire source code into the container
-COPY . .
-
-# Build the application
-RUN go build -o main
-
-# Document the port that may need to be published
-EXPOSE 9000
-
-# Start the application
-CMD ["/build/main"]
+FROM alpine:latest
+WORKDIR /
+COPY --from=builder /app/.env /.env
+COPY --from=builder /forumapi /forumapi
+EXPOSE 5000
+ENTRYPOINT ["/forumapi"]
